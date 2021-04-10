@@ -7,7 +7,7 @@
   />
 <div class="login">
   <div class="header">
-    <img src="../../assets/img/logo.png" alt="">
+    <img src="../../assets/img/logo.jpg" alt="">
     <span>soup</span>
   </div>
   <van-form @submit="onSubmit">
@@ -52,6 +52,7 @@ export default {
     const router = useRouter()
     const onSubmit = (values) =>{
       console.log(values);
+      router.push('/index')
     }
     const back = () =>{
       router.back()

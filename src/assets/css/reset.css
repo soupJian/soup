@@ -20,6 +20,6 @@ mark{background-color:transparent}
 a,ins,s,u,del{text-decoration:none}
 sup,sub{vertical-align:baseline}
 html {overflow-x: hidden;height: 100%;font-size: 14px;-webkit-tap-highlight-color: transparent;}
-body {font-family: Arial, "Microsoft Yahei", "Helvetica Neue", Helvetica, sans-serif;color: #333;font-size: .28em;line-height: 1;-webkit-text-size-adjust: none;}
+body {font-family: Arial, "Microsoft Yahei", "Helvetica Neue", Helvetica, sans-serif;color: #333;font-size: 14px;line-height: 1;-webkit-text-size-adjust: none;}
 hr {height: 1px;margin: 1px 0;border: medium none;border-top: 1px solid #cacaca;}
 a {text-decoration: none; color: #000}

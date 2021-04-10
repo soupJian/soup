@@ -7,7 +7,7 @@
   />
 <div class="login">
   <div class="header">
-    <img src="../../assets/img/logo.png" alt="">
+    <img src="../../assets/img/logo.jpg" alt="">
     <span>soup</span>
   </div>
   <van-form @submit="onSubmit">

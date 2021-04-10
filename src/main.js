@@ -2,5 +2,23 @@ import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
 import store from './store'
+import '@/assets/css/reset.css'
 
-createApp(App).use(store).use(router).mount('#app')
+const app = createApp(App)
+
+app.use(store).use(router).mount('#app')
+
+import { Button } from 'vant'
+import { Form } from 'vant'
+import { Field } from 'vant'
+import { NavBar } from 'vant'
+import { Checkbox } from 'vant'
+
+
+app.use(Button)
+app.use(Form)
+app.use(Field)
+app.use(NavBar)
+app.use(Checkbox)
+
+

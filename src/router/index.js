@@ -23,10 +23,6 @@ const routes = [
       {
         path: '/find',
         component:() => import('../views/Index/Find.vue'),
-      },
-      {
-        path: '/me',
-        component:() => import('../views/Index/Me.vue'),
       }
     ]
   },
@@ -50,6 +46,10 @@ const routes = [
     path: '/search',
     component:() => import('../views/search/Index.vue')
   },
+  {
+    path: '/user',
+    component:() => import('../views/user/User.vue'),
+  }
 ]
 
 const router = createRouter({

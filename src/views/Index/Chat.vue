@@ -3,7 +3,7 @@
 </template>
 <script>
 import { reactive, toRefs } from 'vue'
-import List from '@/components/List.vue'
+import List from './components/List'
 export default {
   components:{
     List

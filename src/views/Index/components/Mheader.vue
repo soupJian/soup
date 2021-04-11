@@ -1,7 +1,6 @@
 <template>
   <div class="title">
-    <img src="../../../assets/img/logo.jpg
-    " alt="">
+    <img src="../../../assets/img/logo.jpg" @click="toUser" alt="">
     <span>{{title}}</span>
     <van-icon name="plus" size="18" color="#fff"/>
   </div>
@@ -26,8 +25,12 @@ export default {
     const toSearch = () => {
       router.push('/search')
     }
+    const toUser = () =>{
+      router.push('/user')
+    }
     return{
-      toSearch
+      toSearch,
+      toUser
     }
   }
 }

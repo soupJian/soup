@@ -15,7 +15,9 @@ import {
   NavBar,
   Checkbox,
   Tabbar, TabbarItem,
-  Icon 
+  Icon,
+  IndexBar, IndexAnchor,
+  Popup 
 } from 'vant'
 
 app.use(Button)
@@ -26,6 +28,12 @@ app.use(Checkbox)
 app.use(Tabbar)
 app.use(TabbarItem)
 app.use(Icon)
+app.use(IndexBar)
+app.use(IndexAnchor)
+app.use(Popup)
+
+
+
 
 
 

@@ -24,7 +24,7 @@ export default {
 }
 </script>
 <style lang="less" scoped>
-@import '../assets/css/mixins.less';
+@import '../../../assets/css/mixins.less';
 .item{
   display: flex;
   padding: 10px 20px;
@@ -35,7 +35,7 @@ export default {
   .des{
     min-width: 0;
     flex: 1;
-    padding-left: 5px;
+    padding-left: 10px;
     display: flex;
     flex-direction: column;
     justify-content: space-around;
@@ -44,6 +44,12 @@ export default {
       justify-content: space-between;
       .des-name,.des-description{
         .ellipsis()
+      }
+      .des-name{
+        font-size: 16px;
+      }
+      .des-description{
+        font-size: 12px;
       }
       .des-bradge{
         width: 15px;

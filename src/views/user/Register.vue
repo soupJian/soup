@@ -57,6 +57,7 @@
 </div>
 </template>
 <script>
+import {Toast} from 'vant'
 import { reactive,ref, toRefs } from 'vue'
 import {useStore} from 'vuex'
 import {useRouter} from 'vue-router'
@@ -86,6 +87,11 @@ export default {
           showAnimation.value = !showAnimation.value
         },1000)
       }else{
+        Toast.loading({
+          message: '加载中...',
+          forbidClick: true,
+          loadingType: 'spinner',
+        });
         const {data: result} = await request({
           methods: 'post',
           url: '/register',
@@ -95,7 +101,14 @@ export default {
             password: values.password
           }
         })
-        store.commit('setUser',result.data.user)
+        if(result.code && result.code == 200){
+          store.commit('setUser',result.data.user)
+        }else{
+          Toast.clear()
+          Toast.fail(result.data.msg);
+          return
+        }
+        Toast.clear()
         router.push('/index')
       }
     }

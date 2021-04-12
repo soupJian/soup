@@ -17,7 +17,7 @@ import {
   Tabbar, TabbarItem,
   Icon,
   IndexBar, IndexAnchor,
-  Popup 
+  Popup,
 } from 'vant'
 
 app.use(Button)
@@ -31,6 +31,7 @@ app.use(Icon)
 app.use(IndexBar)
 app.use(IndexAnchor)
 app.use(Popup)
+
 
 
 

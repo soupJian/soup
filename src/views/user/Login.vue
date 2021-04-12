@@ -8,7 +8,7 @@
 <div class="login">
   <div class="header">
     <img src="../../assets/img/logo.jpg" alt="">
-    <span>soup</span>
+    <span>oup</span>
   </div>
   <van-form @submit="onSubmit">
     <van-field
@@ -39,8 +39,12 @@
 </div>
 </template>
 <script>
+import {Toast} from 'vant'
 import { reactive, toRefs } from 'vue'
 import {useRouter} from 'vue-router'
+import {useStore} from 'vuex'
+import {request} from '@/util/request.js'
+
 export default {
   setup(){
     // 定义user对象
@@ -50,8 +54,30 @@ export default {
     })
     // 定义路由
     const router = useRouter()
-    const onSubmit = (values) =>{
-      console.log(values);
+    // 定义vuex 
+    const store = useStore()
+    const onSubmit = async(values) =>{
+      Toast.loading({
+        message: '加载中...',
+        forbidClick: true,
+        loadingType: 'spinner',
+      });
+      const {data: result} = await request({
+        methods: 'post',
+        url: '/login',
+        data:{
+          name: values.name,
+          password: values.password
+        }
+      })
+      if(result.code && result.code == 200){
+        store.commit('setUser',result.data.user)
+      }else{
+        Toast.clear()
+        Toast.fail(result.data.msg);
+        return
+      }
+      Toast.clear()
       router.push('/index')
     }
     const back = () =>{

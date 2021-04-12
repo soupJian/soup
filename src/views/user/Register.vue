@@ -8,15 +8,22 @@
 <div class="login">
   <div class="header">
     <img src="../../assets/img/logo.jpg" alt="">
-    <span>soup</span>
+    <span>oup</span>
   </div>
   <van-form @submit="onSubmit">
     <van-field
-      v-model="username"
-      name="name"
+      v-model="nick"
+      name="nick"
+      label="昵称"
+      placeholder="昵称"
+      :rules="[{ required: true, message: '请输入您的昵称' }]"
+    />
+    <van-field
+      v-model="account"
+      name="account"
       label="账号"
       placeholder="手机号/邮箱"
-      :rules="[{ required: true, message: '请输入手机号/邮箱' }]"
+      :rules="[{ required: true, message: '请输入手机号/邮箱' },{ validator: checkAccount }]"
     />
     <van-field
       v-model="password"
@@ -37,7 +44,7 @@
     <div class="action">
       <label @click="toggleAgree" :class="showAnimation ? 'animation': ''">
         <div :class="['checkbox',checkbox?'active':'']"></div>
-          已阅读并同意<a href="/server.html" style="color: #1989FA;">服务协议</a>
+          已阅读并同意<a href="/server.html" style="color: #1989FA;" @click.stop>服务协议</a>
       </label>
       <router-link to="/login">立即登录</router-link>
     </div>
@@ -51,12 +58,15 @@
 </template>
 <script>
 import { reactive,ref, toRefs } from 'vue'
+import {useStore} from 'vuex'
 import {useRouter} from 'vue-router'
+import {request} from '@/util/request.js'
 export default {
   setup(){
     // 定义user对象
     const user = reactive({
-      username: '',
+      nick:'',
+      account: '',
       password: '',
       repassword: '',
       checkbox: false,
@@ -65,26 +75,51 @@ export default {
     const timer = ref(null)
     // 定义路由
     const router = useRouter()
+    // 定义 vuex 对象
+    const store = useStore()
     // 注册提交
-    const onSubmit = (values) =>{
-      if(!user.checkbox){
+    const onSubmit = async(values) =>{
+      if(!user.checkbox){ // 判断用户是否统一条款
         showAnimation.value = !showAnimation.value
         clearTimeout(timer.value)
          timer.value = setTimeout(()=>{
           showAnimation.value = !showAnimation.value
         },1000)
       }else{
-        console.log(values);
+        const {data: result} = await request({
+          methods: 'post',
+          url: '/register',
+          data:{
+            nick: values.nick,
+            account: values.account,
+            password: values.password
+          }
+        })
+        store.commit('setUser',result.data.user)
+        router.push('/index')
       }
     }
+    // 路由返回
     const back = () =>{
       router.back()
     }
+    // 检查手机号或者邮箱格式匹配
+    const checkAccount = (value) =>{
+      const phoneReg = /^(13[0-9]|14[01456879]|15[0-35-9]|16[2567]|17[0-8]|18[0-9]|19[0-35-9])\d{8}$/
+      const emailReg = /^([a-zA-Z0-9]+[_|_|\-|.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|_|.]?)*[a-zA-Z0-9]+\.[a-zA-Z]{2,3}$/
+      if(phoneReg.test(value) || emailReg.test(value)){
+        return ''
+      }else{
+        return '手机号或者邮箱格式有误'
+      }
+    }
+    // 检查两次密码是否一致
     const rePwdmessage = (value)=>{
       if(value != user.password){
         return '两次密码不一致，请重新输入'
       }
     }
+    // 是与否同意条款
     const toggleAgree = () =>{
       user.checkbox = !user.checkbox
     }
@@ -93,6 +128,7 @@ export default {
       ...toRefs(user),
       onSubmit,
       back,
+      checkAccount,
       rePwdmessage,
       toggleAgree
     }

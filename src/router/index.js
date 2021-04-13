@@ -28,18 +28,22 @@ const routes = [
   },
   {
     path: '/login',
+    name: 'login',
     component:() => import('../views/user/Login.vue')
   },
   {
     path: '/register',
+    name: 'register',
     component:() => import('../views/user/Register.vue')
   },
   {
     path: '/forget',
+    name: 'forget',
     component:() => import('../views/user/Forget.vue')
   },
   {
     path: '/change',
+    name: 'change',
     component:() => import('../views/user/Change.vue')
   },
   {

@@ -46,6 +46,7 @@ import {useStore} from 'vuex'
 import {request} from '@/util/request.js'
 
 export default {
+  name:'login',
   setup(){
     // 定义user对象
     const user = reactive({

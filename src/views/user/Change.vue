@@ -47,6 +47,7 @@
 import { reactive,ref, toRefs } from 'vue'
 import {useRouter} from 'vue-router'
 export default {
+  name:'change',
   setup(){
     const title = ref("修改密码")
     // 定义user对象

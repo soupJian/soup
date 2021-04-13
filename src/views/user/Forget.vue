@@ -8,22 +8,22 @@
 <div class="login">
   <div class="header">
     <img src="../../assets/img/logo.jpg" alt="">
-    <span>soup</span>
+    <span>oup</span>
   </div>
   <van-form @submit="onSubmit">
     <van-field
       v-model="username"
       name="name"
       label="账号"
-      placeholder="请输入账号"
-      :rules="[{ required: true, message: '请输入账号' }]"
+      placeholder="请输入手机号/邮箱"
+      :rules="[{ required: true, message: '请输入手机号/邮箱' }]"
     />
     <van-field
       v-model="password"
       type="password"
       name="password"
-      label="密码"
-      placeholder="请输入密码"
+      label="新密码"
+      placeholder="请输入新密码"
       :rules="[{ required: true, message: '请输入密码' }]"
     />
     <van-field
@@ -31,8 +31,8 @@
       type="password"
       name="repassword"
       label="确认密码"
-      placeholder="请再次输入密码"
-      :rules="[{ required: true, message: '请再次输入密码' },{ validator: rePwdmessage }]"
+      placeholder="请再次输入新密码"
+      :rules="[{ required: true, message: '请再次输入新密码' },{ validator: rePwdmessage }]"
     />
     <div style="margin: 16px;">
       <van-button round block type="primary" native-type="submit">
@@ -45,7 +45,10 @@
 <script>
 import { reactive,ref, toRefs } from 'vue'
 import {useRouter} from 'vue-router'
+import {request} from '@/util/request.js'
+import {Toast} from 'vant'
 export default {
+  name:'forget',
   setup(){
     const title = ref("忘记密码")
     // 定义user对象
@@ -58,8 +61,27 @@ export default {
     // 定义路由
     const router = useRouter()
     // 注册提交
-    const onSubmit = (values) =>{
-        console.log(values);
+    const onSubmit = async(values) =>{
+      Toast.loading({
+        message: '加载中...',
+        forbidClick: true,
+        loadingType: 'spinner',
+      });
+      const {data: result} = await request({
+        methods: 'post',
+        url: '/forget',
+        data:{
+          name: values.name,
+          password: values.password
+        }
+      })
+      if(result.code == 200){
+        Toast.clear()
+        Toast.fail(result.data.msg);
+      }
+      Toast.clear()
+      Toast.success("密码修改成功，请重新登录")
+      router.replace('/login')
     }
     const back = () =>{
       router.back()

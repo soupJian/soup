@@ -63,6 +63,7 @@ import {useStore} from 'vuex'
 import {useRouter} from 'vue-router'
 import {request} from '@/util/request.js'
 export default {
+  name:'register',
   setup(){
     // 定义user对象
     const user = reactive({

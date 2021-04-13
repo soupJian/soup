@@ -1,49 +1,43 @@
 <template>
 <div class="find">
-  <div class="block">
-    <div class='item'>
-      <img src="../../assets/img/logo.jpg" alt="">
-      <span>好友动态</span>
-    </div>
-  </div>
-  <div class="block">
-    <div class='item'>
-      <img src="../../assets/img/logo.jpg" alt="">
-      <span>vue2.x音乐项目</span>
-    </div>
-    <div class='item'>
-      <img src="../../assets/img/logo.jpg" alt="">
-      <span>react(umi)+typescript+antdpc端音乐项目</span>
-    </div>
-    <div class='item'>
-      <img src="../../assets/img/logo.jpg" alt="">
-      <span>仿去哪儿网3.x</span>
-    </div>
-  </div>
-  <div class="block">
-    <div class='item'>
-      <img src="../../assets/img/logo.jpg" alt="">
-      <span>github</span>
-    </div>
-    <div class='item'>
-      <img src="../../assets/img/logo.jpg" alt="">
-      <span>gitee</span>
-    </div>
-  </div>
-  <div class="block">
-    <div class='item'>
-      <img src="../../assets/img/logo.jpg" alt="">
-      <span>qq</span>
-    </div>
-    <div class='item'>
-      <img src="../../assets/img/logo.jpg" alt="">
-      <span>微信</span>
+  <div class="block" v-for="(list,index) of array" :key="index">
+    <div class='item' v-for="item of list.array" :key="item.id">
+      <img :src="item.imgUrl">
+      <span>{{item.name}}</span>
     </div>
   </div>
 </div>
-  
-
 </template>
+<script>
+import { onMounted, reactive, toRefs } from 'vue'
+import {request} from '@/util/request.js'
+export default {
+  setup(){
+    const state = reactive({
+      array: [
+        {cloudSpace: []},
+        {workspace: []},
+        {codespace: []},
+        {contactspace: []}
+      ]
+    })
+    const getFind = async() => {
+      const {data: result} = await request({
+        methods: 'get',
+        url: '/find'
+      })
+      state.array = result.data
+    }
+    onMounted(()=>{
+      getFind()
+    })
+    return {
+      ...toRefs(state),
+      getFind
+    }
+  }
+}
+</script>
 <style lang="less" scoped>
 .find{
   background: #F5F6FA;
@@ -51,7 +45,7 @@
 .block{
   margin-bottom: 10px;
   .item{
-    padding: 10px;
+    padding: 10px 20px;
     display: flex;
     align-items: center;
     background: #fff;

@@ -43,6 +43,7 @@ export default {
       display: flex;
       justify-content: space-between;
       .des-name,.des-description{
+        flex: 1;
         .ellipsis()
       }
       .des-name{

@@ -1,6 +1,9 @@
 <template>
+  <van-popup v-model:show="show" position="left" :style="{ height: '100%',width: '90%' }">
+    <Setting/>
+  </van-popup>
   <div class="title">
-    <img src="../../../assets/img/logo.jpg" @click="toUser" alt="">
+    <img :src="user.picUrl" @click="showPopup">
     <span>{{title}}</span>
     <van-icon name="plus" size="18" color="#fff"/>
   </div>
@@ -13,7 +16,13 @@
 </template>
 <script>
 import { useRouter } from 'vue-router'
+import {computed, ref} from 'vue'
+import {useStore} from 'vuex'
+import Setting from  './Setting'
 export default {
+  components:{
+    Setting
+  },
   props:{
     title:{
       type: String,
@@ -21,16 +30,25 @@ export default {
     }
   },
   setup(){
+    const show = ref(false);
+    // 定义路由
     const router = useRouter()
+    // 定义vuex
+    const store = useStore()
+    const user = computed(()=>store.state.user)
+    // methods
     const toSearch = () => {
       router.push('/search')
     }
-    const toUser = () =>{
-      router.push('/user')
-    }
+    const showPopup = () => {
+      show.value = true;
+    };
+
     return{
       toSearch,
-      toUser
+      show,
+      showPopup,
+      user
     }
   }
 }

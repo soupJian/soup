@@ -14,14 +14,17 @@ const routes = [
       },
       {
         path: '/chat',
+        name: 'chat',
         component:() => import('../views/Index/Chat.vue'),
       },
       {
         path: '/friends',
+        name: 'friend',
         component:() => import('../views/Index/Friends.vue'),
       },
       {
         path: '/find',
+        name: 'find',
         component:() => import('../views/Index/Find.vue'),
       }
     ]
@@ -48,10 +51,12 @@ const routes = [
   },
   {
     path: '/search',
+    name: 'search',
     component:() => import('../views/search/Index.vue')
   },
   {
     path: '/user',
+    name: 'user',
     component:() => import('../views/user/User.vue'),
   }
 ]
@@ -60,5 +65,17 @@ const router = createRouter({
   history: createWebHashHistory(),
   routes
 })
+// router.beforeEach((to, from, next) => {
+//   if (to.name != 'login' || to.name != 'forget' || to.name != 'register'){
+//     const token = localStorage.getItem('token')
+//     if(token){
+//       next()
+//     }else{
+//       next({ name: 'login' })
+//     }
+//   } else{
+//     next()
+//   }
+// })
 
 export default router

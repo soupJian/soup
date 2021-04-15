@@ -12,6 +12,22 @@ export default createStore({
       }else{
         localStorage.removeItem('user')
       }
+    },
+    setAddCroup(state,addgroup){
+      state.addgroup = addgroup
+      if(addgroup.length>0){
+        localStorage.setItem('addgroup',JSON.stringify(addgroup))
+      }else{
+        localStorage.removeItem('addgroup')
+      }
+    },
+    setCreateGroup(state,creategroup){
+      state.creategroup = creategroup
+      if(creategroup.length>0){
+        localStorage.setItem('creategroup',JSON.stringify(creategroup))
+      }else{
+        localStorage.removeItem('creategroup')
+      }
     }
   },
   actions: {

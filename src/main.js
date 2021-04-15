@@ -18,6 +18,10 @@ import {
   Icon,
   IndexBar, IndexAnchor,
   Popup,
+  Search,
+  Empty,
+  DropdownMenu, DropdownItem,
+  Uploader 
 } from 'vant'
 
 app.use(Button)
@@ -31,6 +35,15 @@ app.use(Icon)
 app.use(IndexBar)
 app.use(IndexAnchor)
 app.use(Popup)
+app.use(Search)
+app.use(Empty)
+app.use(DropdownMenu)
+app.use(DropdownItem)
+app.use(Uploader);
+
+
+
+
 
 
 

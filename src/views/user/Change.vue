@@ -89,7 +89,7 @@ export default {
 }
 </script>
 <style lang="less" scoped>
-/deep/ .van-icon, /deep/.van-nav-bar__text{
+:deep(.van-icon) , :deep(.van-nav-bar__text){
         color: #000;
       }
 .login{

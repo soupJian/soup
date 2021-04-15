@@ -73,6 +73,8 @@ export default {
       })
       if(result.code && result.code == 200){
         store.commit('setUser',result.data.user)
+        store.commit('setCreateGroup',result.data.creategroup)
+        store.commit('setAddCroup',result.data.addgroup)
       }else{
         Toast.clear()
         Toast.fail(result.data.msg);
@@ -93,7 +95,7 @@ export default {
 }
 </script>
 <style lang="less" scoped>
-/deep/ .van-icon, /deep/.van-nav-bar__text{
+:deep(.van-icon), :deep(.van-nav-bar__text){
         color: #000;
       }
 .login{

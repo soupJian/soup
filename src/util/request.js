@@ -5,7 +5,8 @@ export const request = (obj) =>{
   return axios({
     method: obj.methods,
     url,
-    data: obj.data
+    data: obj.data,
+    params: obj.params
   })
 }
 

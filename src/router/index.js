@@ -58,6 +58,16 @@ const routes = [
     path: '/user',
     name: 'user',
     component:() => import('../views/user/User.vue'),
+  },
+  {
+    path:'/searchAdd',
+    name:'searchAdd',
+    component: () => import('../views/search/SearchAdd.vue')
+  },
+  {
+    path:'/createGroup',
+    name:'createGroup',
+    component: () => import('../views/Index/CreateGroup.vue')
   }
 ]
 

@@ -58,8 +58,8 @@ export default {
       // on confirm
       .then(() => {
           localStorage.removeItem("token")
-          store.commit('setUser',{})
           router.replace('/login')
+          store.commit('setUser',{})
       })
     }
     return{

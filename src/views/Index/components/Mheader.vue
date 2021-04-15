@@ -5,7 +5,7 @@
   <div class="title">
     <img :src="user.picUrl" @click="showPopup">
     <span>{{title}}</span>
-    <van-icon name="plus" size="18" color="#fff"/>
+    <van-icon name="plus" size="18" color="#fff" @click="toggleOption"/>
   </div>
   <div class="search" @click="toSearch">
     <div class="input-wrap">
@@ -13,10 +13,25 @@
       <span>搜索</span>
     </div>
   </div>
+  <div class="option-wrap" @click="toggleOption" v-show="showOption">
+    <div class="triangle">
+      <van-icon name="wap-home" color="#fff" size="20"/>
+    </div>
+    <div class="option">
+      <ul>
+        <li v-for='item of option' :key="item.value">
+          <router-link :to="item.router">
+            <van-icon :name="item.name" />
+            <span>{{item.text}}</span>
+          </router-link>
+        </li>
+      </ul>
+    </div>
+  </div>
 </template>
 <script>
 import { useRouter } from 'vue-router'
-import {computed, ref} from 'vue'
+import {computed, onActivated, ref} from 'vue'
 import {useStore} from 'vuex'
 import Setting from  './Setting'
 export default {
@@ -31,11 +46,17 @@ export default {
   },
   setup(){
     const show = ref(false);
+    const showOption = ref(false)
     // 定义路由
     const router = useRouter()
     // 定义vuex
     const store = useStore()
     const user = computed(()=>store.state.user)
+    const dropValue = ref('0')
+    const option = [
+      { text: '加朋友 / 群', value: 0 ,name: "add",router:'/searchAdd'},
+      { text: '创建群聊', value: 1 ,name:'more',router:'/createGroup'},
+    ];
     // methods
     const toSearch = () => {
       router.push('/search')
@@ -43,12 +64,23 @@ export default {
     const showPopup = () => {
       show.value = true;
     };
-
+    const toggleOption = () =>{
+      showOption.value = !showOption.value
+    }
+    onActivated(()=>{
+      show.value = false
+    })
     return{
-      toSearch,
+      // data
+      user,
       show,
+      dropValue,
+      option,
+      showOption,
+      // methods
+      toSearch,
       showPopup,
-      user
+      toggleOption
     }
   }
 }
@@ -86,4 +118,38 @@ export default {
     }
   }
 }
+.option-wrap{
+  position: fixed;
+  z-index: 2;
+  top: 50px;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background: rgba(0,0,0,.5); 
+  .triangle{
+    position: fixed;
+    top: 50px;
+    right: 10px;
+  }  
+  .option{
+    position: fixed;
+    top: 70px;
+    right: 10px;
+    background: #fff;
+    ul{
+      li{
+        padding: 0 20px;
+        line-height: 40px;
+        display: flex;
+        align-items: center;
+        span{
+          color: #000;
+          font-size: 14px;
+          margin-left: 5px;
+        }
+      }
+    }
+  }
+}
+
 </style>

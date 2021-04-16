@@ -2,6 +2,7 @@
   <div class="img-wrap">
     <img :src="user.bgImg" alt="" class="bgImg">
     <div class="layout">
+      <span class="changeInfo" @click="changeInfo">编辑资料</span>
       <div class="info">
         <img :src="user.picUrl" alt="">
         <div class="info-des">
@@ -62,9 +63,13 @@ export default {
           store.commit('setUser',{})
       })
     }
+    const changeInfo = () => {
+      router.push('/changeinfo')
+    }
     return{
       user,
-      quit
+      quit,
+      changeInfo
     }
   }
 }
@@ -111,6 +116,12 @@ export default {
           .ellipsis()
         }
       }
+    }
+    .changeInfo{
+      position: absolute;
+      right: 10px;
+      top: 10px;
+      color: #fff;
     }
   }
 }

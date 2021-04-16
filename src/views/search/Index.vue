@@ -8,7 +8,7 @@
 </template>
 <script>
 import { ref,reactive,toRefs } from 'vue';
-import request from '@/util/request'
+import {request} from '@/util/request'
 export default {
   setup() {
     const value = ref('');

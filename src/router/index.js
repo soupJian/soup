@@ -68,6 +68,11 @@ const routes = [
     path:'/createGroup',
     name:'createGroup',
     component: () => import('../views/Index/CreateGroup.vue')
+  },
+  {
+    path:'/changeinfo',
+    name:'changeinfo',
+    component: () => import('../views/user/ChangeInfo.vue')
   }
 ]
 

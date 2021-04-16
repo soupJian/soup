@@ -21,7 +21,9 @@ import {
   Search,
   Empty,
   DropdownMenu, DropdownItem,
-  Uploader 
+  Uploader,
+  ActionSheet,
+  Picker 
 } from 'vant'
 
 app.use(Button)
@@ -40,16 +42,6 @@ app.use(Empty)
 app.use(DropdownMenu)
 app.use(DropdownItem)
 app.use(Uploader);
-
-
-
-
-
-
-
-
-
-
-
-
+app.use(ActionSheet);
+app.use(Picker);
 

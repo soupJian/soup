@@ -18,13 +18,13 @@
 </div>
 <div class="list" v-show="type == 0">
   <van-empty image="search" description="暂无搜索结果" v-show="userlist.length == 0" />
-  <div class="item" v-for="item of userlist" :key="item.id">
+  <div class="item" v-for="item of userlist" :key="item.id" @click="toUser(item.id)">
     <div>
       <img :src="item.picUrl" alt="">
-      <span v-html="item.nick"></span>
+      <span v-html="item.nickStr"></span>
     </div>
-    <button>
-      {{type==0?'+好友':'+群聊'}}
+    <button @click.stop="add(item)">
+      {{type==0?'+关注':'已添加'}}
     </button>
   </div>
 </div>
@@ -35,17 +35,25 @@
       <img :src="item.picUrl" alt="">
       <span v-html="item.nick"></span>
     </div>
-    <button>+关注</button>
+    <button>
+      {{type==1?'+群聊':'已添加'}}
+    </button>
   </div>
 </div>
 </template>
 <script>
-import { onActivated, reactive, toRefs,watch } from 'vue'
+import { reactive, toRefs,watch,computed } from 'vue'
 import { useRouter } from 'vue-router'
 import {request} from '@/util/request.js'
+import addFriends from '@/util/addfriend.js'
+import { useStore } from 'vuex'
+import {Toast} from 'vant'
+
 export default {
   setup(){
     const router = useRouter()
+    const store = useStore()
+    const user = computed(()=>store.state.user)
     const state = reactive({
       value: '', // 搜索框的值
       type: 0, // 搜索类型，默认找人
@@ -69,11 +77,12 @@ export default {
       if(state.type == 0){
         state.userlist = result.data
         state.userlist.forEach(item=>{
-            item.nick = item.nick.replace(state.value,'<font color="#409EFF">' + state.value + '</font>')
+            item.nickStr = item.nick.replace(state.value,'<font color="#409EFF">' + state.value + '</font>')
         })
       }else{
         state.grouplist = result.data
       }
+      clearTimeout(state.timer)
     }
     const onCancel = () =>{
       state.value = ''
@@ -88,6 +97,14 @@ export default {
       }
       search()
     }
+    const toUser = (id) =>{
+      router.push(`/user/${id}`)
+    }
+    const add = async (item) =>{
+      const {data: result} = await addFriends(item,user)
+      store.commit('setFriends',result.data.friends)
+      Toast.success('添加好友成功')
+    }
     // watch
     watch(()=>state.value,()=>{
       state.userlist = []
@@ -101,20 +118,15 @@ export default {
         },500)
       }
     })
-    onActivated(()=>{
-      state.value = '',
-      state.type = 0,
-      state.userlist = []
-      state.grouplist = [],
-      state.timer = null
-    })
     return{
       ...toRefs(state),
       // methods
       back,
       search,
       onCancel,
-      changeType
+      changeType,
+      toUser,
+      add
     }
   }
 }

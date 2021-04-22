@@ -3,9 +3,9 @@ import { createStore } from 'vuex'
 export default createStore({
   state: {
     user: JSON.parse(localStorage.getItem('user')) || {}, // 用户信息
-    friends: [] ,// 用户好友列表
-    createGroup: [], // 用户创建的群
-    addgroup: [], // 用户加入的群
+    friends: JSON.parse(localStorage.getItem('friends')) || [] ,// 用户好友列表
+    createGroup: JSON.parse(localStorage.getItem('creategroup')) || [], // 用户创建的群
+    addgroup: JSON.parse(localStorage.getItem('addgroup')) || [], // 用户加入的群
   },
   mutations: {
     setUser(state,user){

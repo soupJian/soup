@@ -23,9 +23,9 @@
       <img :src="item.picUrl" alt="">
       <span v-html="item.nickStr"></span>
     </div>
-    <button @click.stop="add(item)">
-      {{type==0?'+关注':'已添加'}}
-    </button>
+    <div v-if="!actionFriends(item)">
+      <button @click.stop="add(item)">+关注</button>
+    </div>
   </div>
 </div>
 <div class="list" v-show="type == 1">
@@ -53,6 +53,7 @@ export default {
   setup(){
     const router = useRouter()
     const store = useStore()
+    const friends = computed(()=>store.state.friends)
     const user = computed(()=>store.state.user)
     const state = reactive({
       value: '', // 搜索框的值
@@ -101,9 +102,25 @@ export default {
       router.push(`/user/${id}`)
     }
     const add = async (item) =>{
+      const index = friends.value.findIndex(i=>{
+        return i.id == item.id
+      })
+      if(index >= 0){
+        return
+      }
       const {data: result} = await addFriends(item,user)
       store.commit('setFriends',result.data.friends)
       Toast.success('添加好友成功')
+    }
+    const actionFriends = (item) =>{
+      const index = friends.value.findIndex(i=>{
+        return i.id == item.id
+      })
+      if(index >= 0){ // 存在则表示已关注
+        return true
+      }else{ // 没有关注
+        return false
+      }
     }
     // watch
     watch(()=>state.value,()=>{
@@ -126,7 +143,8 @@ export default {
       onCancel,
       changeType,
       toUser,
-      add
+      add,
+      actionFriends
     }
   }
 }

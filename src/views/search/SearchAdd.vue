@@ -18,10 +18,13 @@
 </div>
 <div class="list" v-show="type == 0">
   <van-empty image="search" description="暂无搜索结果" v-show="userlist.length == 0" />
-  <div class="item" v-for="item of userlist" :key="item.id" @click="toUser(item.id)">
-    <div>
+  <div class="item-wrap" v-for="item of userlist" :key="item.id" @click="toUser(item.id)">
+    <div class="item">
       <img :src="item.picUrl" alt="">
-      <span v-html="item.nickStr"></span>
+      <div>
+        <p v-html="item.nickStr"></p>
+        <p v-html="item.idStr"></p>
+      </div>
     </div>
     <div v-if="!actionFriends(item)">
       <button @click.stop="add(item)">+关注</button>
@@ -30,8 +33,8 @@
 </div>
 <div class="list" v-show="type == 1">
   <van-empty image="search" description="暂无搜索结果" v-show="grouplist.length == 0" />
-  <div class="item" v-for="item of grouplist" :key="item.id">
-    <div>
+  <div class="item-wrap" v-for="item of grouplist" :key="item.id">
+    <div class="item">
       <img :src="item.picUrl" alt="">
       <span v-html="item.nick"></span>
     </div>
@@ -79,9 +82,14 @@ export default {
         state.userlist = result.data
         state.userlist.forEach(item=>{
             item.nickStr = item.nick.replace(state.value,'<font color="#409EFF">' + state.value + '</font>')
+            item.idStr = `${item.id}`.replace(state.value,'<font color="#409EFF">' + state.value + '</font>')
         })
       }else{
         state.grouplist = result.data
+        state.grouplist.forEach(item=>{
+            item.nickStr = item.nick.replace(state.value,'<font color="#409EFF">' + state.value + '</font>')
+            item.idStr = `${item.id}`.replace(state.value,'<font color="#409EFF">' + state.value + '</font>')
+        })
       }
       clearTimeout(state.timer)
     }
@@ -171,25 +179,31 @@ export default {
   }
 }
 .list{
-  .item{
+  .item-wrap{
     display: flex;
     align-items: center;
     padding: 10px 20px;
     justify-content: space-between;
-    img{
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      margin-right: 20px;
-    }
-    button{
-      width: 50px;
-      height: 20px;
-      line-height: 20px;
-      text-align: center;
-      background-color: #ccc;
-      border-radius: 15px;
-      font-size: 12px;
+    .item{
+      display: flex;
+      img{
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        margin-right: 20px;
+      }
+      p{
+        line-height: 20px;
+      }
+      button{
+        width: 50px;
+        height: 20px;
+        line-height: 20px;
+        text-align: center;
+        background-color: #ccc;
+        border-radius: 15px;
+        font-size: 12px;
+      }
     }
   }
 }

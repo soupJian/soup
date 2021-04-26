@@ -73,6 +73,7 @@ export default {
       })
       if(result.code && result.code == 200){
         store.commit('setUser',result.data.user)
+        store.commit('setFriends',result.data.friends)
         store.commit('setCreateGroup',result.data.creategroup)
         store.commit('setAddCroup',result.data.addgroup)
       }else{

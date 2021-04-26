@@ -1,5 +1,5 @@
 <template>
-  <div class="img-wrap" :style="{'background': `url(${user.bgImg}) center center` }">
+  <div class="img-wrap" :style="{'background': `url(${user.bgImg}) no-repeat`,'background-size': '100% 100%','background-position': 'center center'}">
     <div class="img-layout">
       <div class="back">
         <van-icon name="arrow-left" @click="back" size="20"/>
@@ -9,7 +9,7 @@
       <p class="nick">{{user.nick}}</p>
       <p>
         <span>{{user.sex}}</span>
-      <span>{{user.age}}岁</span>
+      <span v-if="user.age != ''">{{user.age}}岁</span>
       <span>{{user.address}}</span>
       </p>
     </div>
@@ -21,7 +21,7 @@
     </p>
     <p>
       <van-icon name="label-o" size="20"/>
-      <span>{{user.signature}}</span>
+      <span>{{user.signature == '' ? '这家伙很烂什么也没有留下!': user.signature}}</span>
     </p>
     <p>
       <van-icon name="bulb-o" size="20"/>
@@ -34,7 +34,7 @@
   </div>
   <div class="button-wrap">
     <van-button plain type="primary" @click="addFriend">加好友</van-button>
-    <van-button type="primary">发消息</van-button>
+    <van-button type="primary" @click="toChatDetail">发消息</van-button>
   </div>
   <!-- <div class="button-wrap">
     <van-button type="primary">发消息</van-button>
@@ -44,11 +44,13 @@
 import { useRoute, useRouter } from 'vue-router'
 import {request} from '@/util/request.js'
 import { computed,onMounted,reactive,toRefs,watch } from 'vue'
+import { useStore } from 'vuex'
 
 export default {
   setup(){
     const route = useRoute()
     const router = useRouter()
+    const store = useStore()
     const id = computed(()=>route.params.id)
     const state = reactive({
       user: {}
@@ -69,6 +71,10 @@ export default {
     const addFriend = () =>{
       console.log(state.user);
     }
+    const toChatDetail = () =>{
+      store.commit("setFuser",state.user)
+      router.push(`/chatdetail/${state.user.id}`)
+    }
     watch(id,()=>{
       if(!id.value){
         return
@@ -81,7 +87,8 @@ export default {
     return{
       ...toRefs(state),
       back,
-      addFriend
+      addFriend,
+      toChatDetail
     }
   }
 }

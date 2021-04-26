@@ -1,13 +1,15 @@
 <template>
-  <div class="img-wrap">
-    <img :src="user.bgImg" alt="" class="bgImg">
+  <div class="img-wrap" :style="{'background': `url(${user.bgImg}) no-repeat`,'background-size': '100% 100%','background-position': 'center center'}">
     <div class="layout">
       <span class="changeInfo" @click="changeInfo">编辑资料</span>
       <div class="info">
         <img :src="user.picUrl" alt="">
         <div class="info-des">
           <p>{{user.nick}}</p>
-          <p><van-icon name="label-o" size="12" style="margin-right: 5px"/>{{user.signature}}</p>
+          <p>
+            <van-icon name="label-o" size="12" style="margin-right: 5px"/>
+            {{user.signature == '' ? '这家伙很懒，什么也没有留下！': user.signature}}
+          </p>
         </div>
       </div>
     </div>
@@ -80,9 +82,6 @@ export default {
   height: 162px;
   overflow: hidden;
   position: relative;
-  .bgImg{
-    width: 100%;
-  }
   .layout{
     position: absolute;
     background: rgba(0,0,0,.4);

@@ -44,7 +44,6 @@ export default {
         return [...obj]
      })
      const toUser = (id)=>{
-       console.log(id);
        router.push(`/user/${id}`)
      }
       return {

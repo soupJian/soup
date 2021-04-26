@@ -23,7 +23,9 @@ import {
   DropdownMenu, DropdownItem,
   Uploader,
   ActionSheet,
-  Picker 
+  Picker,
+  List,
+  PullRefresh,
 } from 'vant'
 
 app.use(Button)
@@ -44,4 +46,7 @@ app.use(DropdownItem)
 app.use(Uploader);
 app.use(ActionSheet);
 app.use(Picker);
+app.use(List);
+app.use(PullRefresh)
+
 

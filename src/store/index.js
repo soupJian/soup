@@ -48,6 +48,13 @@ export default createStore({
       }else{
         localStorage.removeItem('friends')
       }
+    },
+    resetVuex(state){
+      state.user = {}
+      state.fuser = {}
+      state.friends = []
+      state.createGroup = []
+      state.addgroup = []
     }
   },
   actions: {

@@ -3,8 +3,11 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 import '@/assets/css/reset.css'
+import io from 'weapp.socket.io'
 
 const app = createApp(App)
+
+app.config.globalProperties.$socket = io('http://175.24.116.96:3200')
 
 app.use(store).use(router).mount('#app')
 

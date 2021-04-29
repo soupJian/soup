@@ -24,7 +24,12 @@
         </div>
         <!-- 自己本人 -->
         <div v-else class="user">
-          <p v-html="item.msg" class="msg"></p>
+          <div v-if="item.type == 0">
+            <p v-html="item.msg" class="msg"></p>
+          </div>
+          <div v-if="item.type == 1">
+            <img :src="item.msg" class="msgImg">
+          </div>
           <img :src="user.picUrl" class="picUrl" @click="toUser(user.id)">
         </div>
       </div>
@@ -41,7 +46,7 @@
         class="textarea"
       />
       <van-button :color="message.length > 0 ? '#0089FF': '#7EC0F9'" 
-        class="right-button" @click="handlePostMsg">发送</van-button>
+        class="right-button" @click="socketPostOneChat">发送</van-button>
     </div>
     <div class="serve-wrap">
       <van-icon name="volume-o" class="left-icon" size="20" />
@@ -53,26 +58,24 @@
   </div>
 </template>
 <script>
-const contentHeight = window.screen.height - 130 
-import { useRoute,useRouter } from 'vue-router'
-import { computed, onMounted, reactive, toRefs,watch,ref} from 'vue'
+import { useRouter } from 'vue-router'
+import { computed, onMounted, reactive, toRefs,watch,ref,getCurrentInstance} from 'vue'
 import { useStore } from 'vuex'
+import {request} from '@/util/request.js'
 export default {
   setup(){
-    const route = useRoute()
     const router = useRouter()
     const store = useStore()
     const content = ref(null)
+    const {ctx} = getCurrentInstance()
     // 用户
     const user = computed(()=>store.state.user)
     // 聊天对象
     const fuser = computed(()=>store.state.fuser)
-    // 聊天沟通者
-    // const chatUser = computed(()=>store.state.chatUser)
-    const id = computed(()=>route.params.id)
+    const id = computed(()=>store.state.fuser.id)
     const state = reactive({
       message: '',
-      loading: false,
+      loading: true,
       finished: false,
       refreshing: false,
       chatArray:[],
@@ -81,101 +84,23 @@ export default {
     const back = () => {
       router.back()
     }
-    const onLoad = () => {
-      setTimeout(() => {
-        if (state.refreshing) {
-          state.chatArray = [];
-          state.refreshing = false;
+    const onLoad = async() => {
+      if (state.refreshing) {
+        state.chatArray = [];
+        state.refreshing = false;
+      }
+      const {data: result} = await request({
+        methods: 'get',
+        url: '/chat',
+        params:{
+          uid: user.value.id,
+          fid: fuser.value.id
         }
-        state.chatArray = [
-        {
-            uid: 1619087695533,
-            time: 121425115,
-            type: 0,
-            msg: '你好啊，soupjian,node结合vue3实现仿QQ聊天你好啊，soupjian,node结合vue3实现仿QQ聊天'
-          },
-          {
-            uid: 1619162266487,
-            time: 121425115,
-            type: 0,
-            msg: '阿里嘎多'
-          },
-          {
-            uid: 1619087695533,
-            time: 121425115,
-            type: 0,
-            msg: '上号'
-          },
-          {
-            uid: 1619162266487,
-            time: 121425115,
-            type: 0,
-            msg: '王者还是刺激'
-          },
-          {
-            uid: 1619087695533,
-            time: 121425115,
-            type: 0,
-            msg: '刺激'
-          },
-          {
-            uid: 1619087695533,
-            time: 121425115,
-            type: 1,
-            msg: 'http://www.soupjian.work:3100/user/1619162266487/-----soupCoover======/picUrl.jpg'
-          },
-          {
-            uid: 1619162266487,
-            time: 121425115,
-            type: 0,
-            msg: 'x秀儿'
-          },
-          {
-            uid: 1619087695533,
-            time: 121425115,
-            type: 0,
-            msg: '来了来了'
-          },
-          {
-            uid: 1619162266487,
-            time: 121425115,
-            type: 0,
-            msg: '开卖'
-          },
-          {
-            uid: 1619087695533,
-            time: 121425115,
-            type: 0,
-            msg: 'okok'
-          },
-          {
-            uid: 1619162266487,
-            time: 121425115,
-            type: 0,
-            msg: '快上车'
-          },
-          {
-            uid: 1619087695533,
-            time: 121425115,
-            type: 0,
-            msg: '有几个妹子'
-          },
-          {
-            uid: 1619162266487,
-            time: 121425115,
-            type: 0,
-            msg: '两'
-          },
-          {
-            uid: 1619087695533,
-            time: 121425115,
-            type: 0,
-            msg: '速度速度'
-          },
-        ],
-        state.loading = false;
-        state.finished = true;
-      }, 1000);
+      })
+      state.chatArray = result
+      state.loading = false;
+      state.finished = true;
+      scroll()
     };
     const onRefresh = () => {
       state.loading = true;
@@ -184,40 +109,60 @@ export default {
     const toUser = (id)=>{
       router.push(`/user/${id}`)
     }
-    const handlePostMsg = () =>{
+    // 用户向socket发送消息
+    const socketPostOneChat = () =>{
       if(state.message == ''){
         return
       }
-      state.chatArray.push({
-        uid: 1619162266487,
-        time: 121425115,
+      ctx.$socket.emit('postOneChat',{
+        uid: user.value.id,
+        fid: fuser.value.id,
         type: 0,
         msg: state.message
       })
       state.message = ''
-      // window.screen.height 屏幕高度 130是头部导航栏和底部输入框区域
-      const contentHeight = window.screen.height - 130 
-      // 采用定时器0,解决输入后获取的还是上一个的高度
-      setTimeout(()=>{
-        // 滚动的高度
-        if(content.value.$el.scrollHeight > contentHeight){
-          content.value.$el.scrollTop =  content.value.$el.scrollHeight- contentHeight
+    }
+    // 用户接受socket消息
+    const socketReceiveOneChat = ()=>{
+      ctx.$socket.on('receiveOneChat',data=>{
+        if(data.uid){
+          state.chatArray.push({
+            uid: data.uid,
+            time: data.time,
+            type: data.type,
+            msg: data.msg
+          })
+        }else{
+          state.chatArray.push({
+            fid: data.fid,
+            time: data.time,
+            type: data.type,
+            msg: data.msg
+          })
         }
-      },0)
+        scroll()
+      })
+    }
+    const scroll = () =>{
+      // window.screen.height 屏幕高度 130是头部导航栏和底部输入框区域
+        const contentHeight = window.screen.height - 130 
+        // 采用定时器0,解决输入后获取的还是上一个的高度
+        setTimeout(()=>{
+          // 滚动的高度
+          if(content.value.$el.scrollHeight > contentHeight){
+            content.value.$el.scrollTop =  content.value.$el.scrollHeight- contentHeight
+          }
+        },0)
     }
     onMounted(()=>{
-      onLoad()
-      setTimeout(()=>{
-        // 滚动的高度 进入页面的时候滚动到底部
-        if(content.value.$el.scrollHeight > contentHeight){
-          content.value.$el.scrollTop =  content.value.$el.scrollHeight- contentHeight
-        }
-      },1000)
+      socketReceiveOneChat()
     })
     watch(id,()=>{
-      console.log(id);
-      // state.loading = true
-      onLoad()
+      state.chatArray = []
+      if(id.value){
+        onLoad()
+      }
+      state.loading = true
     })
     return {
       ...toRefs(state),
@@ -228,8 +173,8 @@ export default {
       onLoad,
       onRefresh,
       toUser,
-      handlePostMsg,
-      content
+      socketPostOneChat,
+      content,
     }
   }
 }
@@ -239,7 +184,7 @@ export default {
         color: #000;
       }
 .content{
-  padding: 0 10px;
+  padding: 10px;
   background: #EAEDF4;
   position: fixed;
   top: 46px;
@@ -249,7 +194,7 @@ export default {
   overflow: scroll;
 }
 .item{
-  margin-top: 10px;
+  margin-bottom: 10px;
   .fuser,.user{
     display: flex;
     .picUrl{

@@ -48,21 +48,23 @@
 import { useRouter } from 'vue-router'
 import {useStore} from 'vuex'
 import { Dialog } from 'vant';
-import { computed } from 'vue';
+import { computed, getCurrentInstance } from 'vue';
 export default {
   setup(){
     const store = useStore()
     const user = computed(()=>store.state.user)
     const router = useRouter()
+    const {ctx} = getCurrentInstance()
     const quit = () => {
       Dialog.confirm({
         message: '确认退出登录么',
       })
       // on confirm
       .then(() => {
-          localStorage.removeItem("token")
+          ctx.$socket.emit('outline',user.value.id)
+          localStorage.clear()
           router.replace('/login')
-          store.commit('setUser',{})
+          store.commit('resetVuex')
       })
     }
     const changeInfo = () => {

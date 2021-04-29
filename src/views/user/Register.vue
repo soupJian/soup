@@ -58,13 +58,14 @@
 </template>
 <script>
 import {Toast} from 'vant'
-import { reactive,ref, toRefs } from 'vue'
+import { getCurrentInstance, reactive,ref, toRefs } from 'vue'
 import {useStore} from 'vuex'
 import {useRouter} from 'vue-router'
 import {request} from '@/util/request.js'
 export default {
   name:'register',
   setup(){
+    const {ctx} = getCurrentInstance()
     // 定义user对象
     const user = reactive({
       nick:'',
@@ -81,7 +82,7 @@ export default {
     const store = useStore()
     // 注册提交
     const onSubmit = async(values) =>{
-      if(!user.checkbox){ // 判断用户是否统一条款
+      if(!user.checkbox){ // 判断用户是否同意服务条款
         showAnimation.value = !showAnimation.value
         clearTimeout(timer.value)
          timer.value = setTimeout(()=>{
@@ -112,6 +113,7 @@ export default {
         }
         Toast.clear()
         router.push('/index')
+        ctx.$socket.emit('online',result.data.user.id)
       }
     }
     // 路由返回

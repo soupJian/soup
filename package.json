@@ -14,7 +14,8 @@
     "vant": "^3.0.12",
     "vue": "^3.0.0",
     "vue-router": "^4.0.0-0",
-    "vuex": "^4.0.0-0"
+    "vuex": "^4.0.0-0",
+    "weapp.socket.io": "^2.1.0"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.0",

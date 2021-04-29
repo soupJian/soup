@@ -58,14 +58,15 @@
 </template>
 <script>
 import {Toast} from 'vant'
-import { getCurrentInstance, reactive,ref, toRefs } from 'vue'
+import { reactive,ref, toRefs } from 'vue'
 import {useStore} from 'vuex'
 import {useRouter} from 'vue-router'
 import {request} from '@/util/request.js'
+import $socket from '@/util/socket'
+
 export default {
   name:'register',
   setup(){
-    const {ctx} = getCurrentInstance()
     // 定义user对象
     const user = reactive({
       nick:'',
@@ -113,7 +114,7 @@ export default {
         }
         Toast.clear()
         router.push('/index')
-        ctx.$socket.emit('online',result.data.user.id)
+        $socket.emit('online',result.data.user.id)
       }
     }
     // 路由返回

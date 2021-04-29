@@ -59,15 +59,16 @@
 </template>
 <script>
 import { useRouter } from 'vue-router'
-import { computed, onMounted, reactive, toRefs,watch,ref,getCurrentInstance} from 'vue'
+import { computed, onMounted, reactive, toRefs,watch,ref} from 'vue'
 import { useStore } from 'vuex'
 import {request} from '@/util/request.js'
+import $socket from '@/util/socket'
+
 export default {
   setup(){
     const router = useRouter()
     const store = useStore()
     const content = ref(null)
-    const {ctx} = getCurrentInstance()
     // 用户
     const user = computed(()=>store.state.user)
     // 聊天对象
@@ -114,7 +115,7 @@ export default {
       if(state.message == ''){
         return
       }
-      ctx.$socket.emit('postOneChat',{
+      $socket.emit('postOneChat',{
         uid: user.value.id,
         fid: fuser.value.id,
         type: 0,
@@ -124,7 +125,7 @@ export default {
     }
     // 用户接受socket消息
     const socketReceiveOneChat = ()=>{
-      ctx.$socket.on('receiveOneChat',data=>{
+      $socket.on('receiveOneChat',data=>{
         if(data.uid){
           state.chatArray.push({
             uid: data.uid,

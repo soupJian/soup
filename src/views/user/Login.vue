@@ -40,15 +40,14 @@
 </template>
 <script>
 import {Toast} from 'vant'
-import { reactive, toRefs,getCurrentInstance } from 'vue'
+import { reactive, toRefs } from 'vue'
 import {useRouter} from 'vue-router'
 import {useStore} from 'vuex'
 import {request} from '@/util/request.js'
-
+import $socket from '@/util/socket'
 export default {
   name:'login',
   setup(){
-    const {ctx} = getCurrentInstance()
     // 定义user对象
     const user = reactive({
       username: '',
@@ -77,7 +76,7 @@ export default {
         store.commit('setFriends',result.data.friends)
         store.commit('setCreateGroup',result.data.creategroup)
         store.commit('setAddCroup',result.data.addgroup)
-        ctx.$socket.emit('online',result.data.user.id)
+        $socket.emit('online',result.data.user.id)
       }else{
         Toast.clear()
         Toast.fail(result.data.msg);

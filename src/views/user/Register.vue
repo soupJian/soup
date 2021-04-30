@@ -16,7 +16,7 @@
       name="nick"
       label="昵称"
       placeholder="昵称"
-      :rules="[{ required: true, message: '请输入您的昵称' }]"
+      :rules="[{ required: true, message: '请输入您的昵称' },{ validator: checkNick }]"
     />
     <van-field
       v-model="account"
@@ -121,6 +121,21 @@ export default {
     const back = () =>{
       router.back()
     }
+    // 检查昵称是否被占用
+    const checkNick = async() =>{
+      const {data: result} = await request({
+          methods: 'post',
+          url: '/checkNick',
+          data:{
+            nick: user.nick
+          }
+        })
+      if(result.data.msg){
+        return result.data.msg
+      }else{
+        return ''
+      }
+    }
     // 检查手机号或者邮箱格式匹配
     const checkAccount = (value) =>{
       const phoneReg = /^(13[0-9]|14[01456879]|15[0-35-9]|16[2567]|17[0-8]|18[0-9]|19[0-35-9])\d{8}$/
@@ -146,6 +161,7 @@ export default {
       ...toRefs(user),
       onSubmit,
       back,
+      checkNick,
       checkAccount,
       rePwdmessage,
       toggleAgree

@@ -1,5 +1,5 @@
 <template>
-  <List :list="list" @delete="handleDelete"></List>
+  <List :list="list" @delete="handleDelete" @readNews="handleReadNews"></List>
 </template>
 <script>
 import { computed, onMounted, reactive, toRefs } from 'vue'
@@ -7,6 +7,7 @@ import List from './components/List'
 import $socket from '@/util/socket'
 import {request} from '@/util/request.js'
 import { useStore } from 'vuex'
+import { useRoute } from 'vue-router'
 
 export default {
   components:{
@@ -14,6 +15,7 @@ export default {
   },
   setup(){
     const store = useStore()
+    const route = useRoute()
     const user = computed(()=>store.state.user)
     const state = reactive({
       list:[]
@@ -21,6 +23,7 @@ export default {
     const handleDelete = (item)=>{
       console.log(item);
     }
+    // 获取聊天列表
     const getNewsList = async() =>{
       const {data: result} = await request({
         methods: 'get',
@@ -31,6 +34,23 @@ export default {
       })
       state.list = result.data.list
     }
+    // 点击表示已读，右侧小圆点消失
+    const handleReadNews = async (item)=>{
+      console.log(item);
+      const index  = state.list.findIndex(i=>{
+        return i.id == item.id
+      })
+      state.list[index].bradge = 0
+      await request({
+        methods: 'post',
+        url: '/newsList',
+        data:{
+          id: user.value.id,
+          list: JSON.stringify(state.list)
+        }
+      })
+    }
+    // 接受socket消息
     const receiveNewsList = ()=>{
       $socket.on('receiveNewsList',data =>{
         let bradge = 0
@@ -38,7 +58,11 @@ export default {
           return item.id == data.id
         })
         if(index >= 0){
-          bradge = state.list[index].bradge
+          // 如果是自己发送的消息不需要展示右侧远点
+          // 如果已经处于用户聊天界面，这里也不需要显示右侧圆点
+          if(data.flag && route.path != `/chatdetail/${data.id}`){ 
+            bradge = state.list[index].bradge + 1
+          }
           state.list.splice(index,1)
         }
         state.list.unshift({
@@ -46,7 +70,7 @@ export default {
           nick: data.nick,
           time: data.time,
           picUrl: data.picUrl,
-          bradge: bradge + 1,
+          bradge,
           msg: data.msg
         })
       })
@@ -57,7 +81,8 @@ export default {
     })
     return{
       ...toRefs(state),
-      handleDelete
+      handleDelete,
+      handleReadNews
     }
   }
 }

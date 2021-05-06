@@ -10,7 +10,7 @@
         </p>
         <p>
           <span class="des-description">{{item.msg}}</span>
-          <span class="des-bradge" v-show="item.bradge > 0">{{item.bradge}}</span>
+          <span class="des-bradge" v-show="item.bradge > 0 && item.id != user.id">{{item.bradge}}</span>
         </p>
       </div>
     </div>
@@ -34,19 +34,22 @@ export default {
       required: true
     }
   },
-  emits: ['delete'],
+  emits: ['delete','readNews'],
   setup(props,ctx){
     const handleDelete = (item) =>{
       ctx.emit('delete',item)
     }
     const router = useRouter()
     const store = useStore()
+    const user = computed(()=>store.state.user)
     const newsList = computed(()=>props.list)
     const toUser = (item)=>{
       store.commit("setFuser",item)
+      ctx.emit('readNews',item)
       router.push(`/chatdetail/${item.id}`)
     }
     return{
+      user,
       newsList,
       handleDelete,
       toUser

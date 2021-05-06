@@ -60,7 +60,7 @@
 </template>
 <script>
 import { useRouter } from 'vue-router'
-import { computed, onMounted, reactive, toRefs,watch,ref} from 'vue'
+import { computed, onMounted, reactive, toRefs,watch,ref, onActivated} from 'vue'
 import { useStore } from 'vuex'
 import {request} from '@/util/request.js'
 import $socket from '@/util/socket'
@@ -166,6 +166,9 @@ export default {
     }
     onMounted(()=>{
       socketReceiveOneChat()
+    })
+    onActivated(()=>{
+      scroll()
     })
     watch(id,()=>{
       state.chatArray = []

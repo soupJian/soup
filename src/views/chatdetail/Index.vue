@@ -158,9 +158,9 @@ export default {
         const contentHeight = window.screen.height - 130 
         // 采用定时器0,解决输入后获取的还是上一个的高度
         setTimeout(()=>{
-          // 滚动的高度
+          // 滚动的高度 + 1000 是为了让滚动直接滚动到底部，模拟器正常，手机网页不正常
           if(content.value.$el.scrollHeight > contentHeight){
-            content.value.$el.scrollTop =  content.value.$el.scrollHeight- contentHeight
+            content.value.$el.scrollTop =  content.value.$el.scrollHeight- contentHeight + 1000
           }
         },0)
     }

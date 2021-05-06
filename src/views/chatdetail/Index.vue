@@ -44,6 +44,7 @@
         type="textarea"
         maxlength="500"
         class="textarea"
+        contenteditable
       />
       <van-button :color="message.length > 0 ? '#0089FF': '#7EC0F9'" 
         class="right-button" @click="socketPostOneChat">发送</van-button>
@@ -116,8 +117,16 @@ export default {
         return
       }
       $socket.emit('postOneChat',{
-        uid: user.value.id,
-        fid: fuser.value.id,
+        user:{
+          id: user.value.id,
+          nick: user.value.nick,
+          picUrl: user.value.picUrl
+        },
+        fuser:{
+          id: fuser.value.id,
+          nick: fuser.value.nick,
+          picUrl: fuser.value.picUrl
+        },
         type: 0,
         msg: state.message
       })
@@ -207,6 +216,7 @@ export default {
       padding: 5px 10px;
       line-height: 20px;
       border-radius: 5px;
+      word-break:break-word;
     }
     .msgImg{
       max-width: 250px;

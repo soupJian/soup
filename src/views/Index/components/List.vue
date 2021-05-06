@@ -1,35 +1,75 @@
 <template>
-  <div v-for="item of list" :key='item.id' class="item">
-    <img :src="item.picUrl" alt="">
-    <div class="des">
-      <p>
-        <span class="des-name">{{item.name}}</span>
-        <span class="des-time">{{item.time}}</span>
-      </p>
-      <p>
-        <span class="des-description">{{item.description}}</span>
-        <span class="des-bradge" v-show="item.bradge">{{item.bradge}}</span>
-      </p>
+<div class="item-wrap">
+  <van-swipe-cell v-for="item of newsList" :key='item.id'>
+    <div class="item" @click="toUser(item)">
+      <img :src="item.picUrl" alt="">
+      <div class="des">
+        <p style="margin-bottom: 5px">
+          <span class="des-name">{{item.nick}}</span>
+          <span class="des-time">{{item.time}}</span>
+        </p>
+        <p>
+          <span class="des-description">{{item.msg}}</span>
+          <span class="des-bradge" v-show="item.bradge > 0">{{item.bradge}}</span>
+        </p>
+      </div>
     </div>
+    <template #right>
+      <van-button square text="删除" type="danger" class="delete-button" @click="handleDelete(item)"/>
+    </template>
+  </van-swipe-cell>
+</div>
+  <div >
+   
   </div>
 </template>
 <script>
+import { computed } from 'vue'
+import { useRouter } from 'vue-router'
+import { useStore } from 'vuex'
 export default {
   props:{
     list: {
       type: Array,
       required: true
     }
+  },
+  emits: ['delete'],
+  setup(props,ctx){
+    const handleDelete = (item) =>{
+      ctx.emit('delete',item)
+    }
+    const router = useRouter()
+    const store = useStore()
+    const newsList = computed(()=>props.list)
+    const toUser = (item)=>{
+      store.commit("setFuser",item)
+      router.push(`/chatdetail/${item.id}`)
+    }
+    return{
+      newsList,
+      handleDelete,
+      toUser
+    }
   }
 }
 </script>
 <style lang="less" scoped>
 @import '../../../assets/css/mixins.less';
+.item-wrap{
+  position: fixed;
+  bottom: 50px;
+  top: 100px;
+  width: 100%;
+  overflow: scroll;
+}
 .item{
   display: flex;
   padding: 10px 20px;
+  align-items: center;
   img{
-    width: 50px;
+    width: 30px;
+    height: 30px;
     border-radius: 50%;
   }
   .des{

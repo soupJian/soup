@@ -28,6 +28,7 @@ import {
   Picker,
   List,
   PullRefresh,
+  SwipeCell 
 } from 'vant'
 
 app.use(Button)
@@ -50,5 +51,6 @@ app.use(ActionSheet);
 app.use(Picker);
 app.use(List);
 app.use(PullRefresh)
+app.use(SwipeCell);
 
 

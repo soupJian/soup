@@ -36,7 +36,9 @@ export default {
     }
     // 点击表示已读，右侧小圆点消失
     const handleReadNews = async (item)=>{
-      console.log(item);
+      if(item.bradge == 0){
+        return
+      }
       const index  = state.list.findIndex(i=>{
         return i.id == item.id
       })
@@ -53,6 +55,7 @@ export default {
     // 接受socket消息
     const receiveNewsList = ()=>{
       $socket.on('receiveNewsList',data =>{
+        console.log(data);
         let bradge = 0
         const index = state.list.findIndex(item=>{
           return item.id == data.id
@@ -64,6 +67,8 @@ export default {
             bradge = state.list[index].bradge + 1
           }
           state.list.splice(index,1)
+        }else{
+          bradge = 1
         }
         state.list.unshift({
           id: data.id,

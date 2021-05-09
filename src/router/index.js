@@ -77,7 +77,7 @@ const routes = [
   {
     path: '/chatdetail/:id',
     name: 'chatdetail',
-    component:() =>import('../views/chatdetail/Index.vue')
+    component:() =>import('../views/chatdetail/UserChat.vue')
   }
 ]
 

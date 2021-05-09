@@ -44,6 +44,8 @@ import { computed, reactive, toRefs } from 'vue';
 import { useRouter } from 'vue-router'
 import {request} from '@/util/request.js'
 import { useStore } from 'vuex';
+import $socket from '@/util/socket'
+
 export default {
   setup(){
     // 定义路由
@@ -51,6 +53,7 @@ export default {
     // vuex
     const store = useStore()
     const user = computed(()=>store.state.user)
+    const creategroup = computed(()=>store.state.creategroup)
     const state = reactive({
       fileList: [],
       groupname: '',
@@ -84,12 +87,31 @@ export default {
             description: state.description
           }
         })
+        store.commit('setCreateGroup',result.creategroup)
+        socketReseiveGroup()
         Toast.success({
           message: result.msg,
           position: 'top',
         });
         router.back()
       }
+    }
+    const socketReseiveGroup = () =>{
+      const group = creategroup.value[creategroup.value.length -1]
+      $socket.emit('postGroupChat',{
+        user:{
+          id: user.value.id,
+          nick: user.value.nick,
+          picUrl: user.value.picUrl
+        },
+        group:{
+          id: group.id,
+          nick: group.nick,
+          picUrl: group.picUrl
+        },
+        type: 0,
+        msg: '创建群聊成功，快去邀请小伙伴加入群聊吧'
+      })
     }
     return{
       ...toRefs(state),

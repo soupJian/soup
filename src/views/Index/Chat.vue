@@ -55,7 +55,6 @@ export default {
     // 接受socket消息
     const receiveNewsList = ()=>{
       $socket.on('receiveNewsList',data =>{
-        console.log(data);
         let bradge = 0
         const index = state.list.findIndex(item=>{
           return item.id == data.id
@@ -76,7 +75,8 @@ export default {
           time: data.time,
           picUrl: data.picUrl,
           bradge,
-          msg: data.msg
+          msg: data.msg,
+          type: data.type
         })
       })
     }

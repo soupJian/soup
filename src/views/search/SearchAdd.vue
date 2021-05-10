@@ -70,6 +70,9 @@ export default {
       router.back()
     }
     const search = async() =>{
+      if(state.value == ''){
+        return
+      }
       const {data: result} = await request({
         methods: 'get',
         url: '/search',
@@ -132,11 +135,10 @@ export default {
     }
     // watch
     watch(()=>state.value,()=>{
-      state.userlist = []
-      state.grouplist = []
       if(state.value == ''){
         return
       }else{
+        console.log(state.value);
         clearTimeout(state.timer)
         setTimeout(()=>{
           search()

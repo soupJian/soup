@@ -96,6 +96,7 @@ export default {
     // 用户接受socket消息
     const socketReceiveOneChat = ()=>{
       $socket.on('receiveOneChat',data=>{
+        console.log(data);
           state.chatArray.push({
             id: data.id,
             time: data.time,

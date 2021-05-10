@@ -1,17 +1,7 @@
 <template>
   <div class="item" v-for="item of chatArray" :key="item.time">
-    <!-- 聊天对象 -->
-    <div v-if="item.id != user.id" class="fuser">
-      <img :src="picUrl(item.id)" class="picUrl" @click="toUser(item.id)">
-      <div v-if="item.type == 0">
-        <p v-html="item.msg" class="msg"></p>
-      </div>
-      <div v-if="item.type == 1">
-        <img :src="item.msg" class="msgImg">
-      </div>
-    </div>
     <!-- 自己本人 -->
-    <div v-else class="user">
+    <div v-if="item.id == user.id" class="user">
       <div v-if="item.type == 0">
         <p v-html="item.msg" class="msg"></p>
       </div>
@@ -19,6 +9,16 @@
         <img :src="item.msg" class="msgImg">
       </div>
       <img :src="user.picUrl" class="picUrl" @click="toUser(user.id)">
+    </div>
+    <!-- 聊天对象 -->
+    <div v-else class="fuser">
+      <img :src="picUrl(item.id)" class="picUrl" @click="toUser(item.id)">
+      <div v-if="item.type == 0">
+        <p v-html="item.msg" class="msg"></p>
+      </div>
+      <div v-if="item.type == 1">
+        <img :src="item.msg" class="msgImg">
+      </div>
     </div>
   </div>
 </template>

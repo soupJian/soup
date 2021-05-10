@@ -1,10 +1,5 @@
 <template>
-<van-nav-bar
-    :title="title"
-    left-text="返回"
-    left-arrow
-    @click-left="back"
-  />
+<m-header :title="title"/>
 <div class="login">
   <div class="header">
     <img src="../../assets/img/logo.jpg" alt="">
@@ -44,9 +39,12 @@
 </div>
 </template>
 <script>
+import MHeader from '@/components/MHeader.vue'
 import { reactive,ref, toRefs } from 'vue'
-import {useRouter} from 'vue-router'
 export default {
+  components:{
+    MHeader
+  },
   name:'change',
   setup(){
     const title = ref("修改密码")
@@ -58,16 +56,12 @@ export default {
       checkbox: false,
     })
     // 定义路由
-    const router = useRouter()
     // 注册提交
     const onSubmit = (values) =>{
         if(user.oldPassword == user.newPassword){
           return
         }
         console.log(values);
-    }
-    const back = () =>{
-      router.back()
     }
     const rePwdmessage = (value)=>{
       if(value != user.newPassword){
@@ -81,7 +75,6 @@ export default {
       title,
       ...toRefs(user),
       onSubmit,
-      back,
       rePwdmessage,
       toggleAgree
     }
@@ -89,9 +82,6 @@ export default {
 }
 </script>
 <style lang="less" scoped>
-:deep(.van-icon) , :deep(.van-nav-bar__text){
-        color: #000;
-      }
 .login{
   margin-top: 15vh;
   display: flex;

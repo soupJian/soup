@@ -1,10 +1,5 @@
 <template>
-<van-nav-bar
-    title="登录"
-    left-text="返回"
-    left-arrow
-    @click-left="back"
-  />
+<m-header title="登录"/>
 <div class="login">
   <div class="header">
     <img src="../../assets/img/logo.jpg" alt="">
@@ -39,6 +34,7 @@
 </div>
 </template>
 <script>
+import MHeader from '@/components/MHeader'
 import {Toast} from 'vant'
 import { reactive, toRefs } from 'vue'
 import {useRouter} from 'vue-router'
@@ -47,6 +43,9 @@ import {request} from '@/util/request.js'
 import $socket from '@/util/socket'
 export default {
   name:'login',
+  components:{
+    MHeader
+  },
   setup(){
     // 定义user对象
     const user = reactive({
@@ -85,21 +84,14 @@ export default {
       Toast.clear()
       router.push('/index')
     }
-    const back = () =>{
-      router.back()
-    }
     return{
       ...toRefs(user),
       onSubmit,
-      back
     }
   }
 }
 </script>
 <style lang="less" scoped>
-:deep(.van-icon), :deep(.van-nav-bar__text){
-        color: #000;
-      }
 .login{
   margin-top: 25vh;
   display: flex;

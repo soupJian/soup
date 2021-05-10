@@ -1,14 +1,6 @@
 <template>
 <div class="header">
-  <van-nav-bar
-    title="编辑资料"
-    left-text="返回"
-    right-text="保存"
-    left-arrow
-    @click-left="back"
-    @click-right="save"
-
-  />
+<m-header title="编辑资料" rightText="保存" @handleRight="save"/>
 </div>
 <van-form>
 <van-field
@@ -94,12 +86,17 @@
   
 </template>
 <script>
+import MHeader from '@/components/MHeader'
+
 import { ref } from 'vue'
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
 import {request} from '@/util/request.js'
 import {Toast} from 'vant'
 export default {
+  components:{
+    MHeader
+  },
   setup(){
     const router = useRouter()
     const store = useStore()
@@ -191,11 +188,6 @@ export default {
 }
 </script>
 <style lang="less" scoped>
-.header{
-  :deep(.van-icon), :deep(.van-nav-bar__text){
-          color: #000;
-        }
-}
 :deep(.van-cell){
   padding: 8px 16px;
 }

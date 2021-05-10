@@ -1,10 +1,5 @@
 <template>
-<van-nav-bar
-    title="注册"
-    left-text="返回"
-    left-arrow
-    @click-left="back"
-  />
+<m-header title="注册"/>
 <div class="login">
   <div class="header">
     <img src="../../assets/img/logo.jpg" alt="">
@@ -57,6 +52,7 @@
 </div>
 </template>
 <script>
+import MHeader from '@/components/MHeader'
 import {Toast} from 'vant'
 import { reactive,ref, toRefs } from 'vue'
 import {useStore} from 'vuex'
@@ -66,6 +62,9 @@ import $socket from '@/util/socket'
 
 export default {
   name:'register',
+  components:{
+    MHeader
+  },
   setup(){
     // 定义user对象
     const user = reactive({
@@ -117,10 +116,6 @@ export default {
         $socket.emit('online',result.data.user.id)
       }
     }
-    // 路由返回
-    const back = () =>{
-      router.back()
-    }
     // 检查昵称是否被占用
     const checkNick = async() =>{
       const {data: result} = await request({
@@ -160,7 +155,6 @@ export default {
       showAnimation,
       ...toRefs(user),
       onSubmit,
-      back,
       checkNick,
       checkAccount,
       rePwdmessage,
@@ -170,9 +164,6 @@ export default {
 }
 </script>
 <style lang="less" scoped>
-:deep(.van-icon),:deep(.van-nav-bar__text){
-        color: #000;
-      }
 .login{
   margin-top: 15vh;
   display: flex;

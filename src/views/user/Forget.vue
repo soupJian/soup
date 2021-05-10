@@ -1,10 +1,5 @@
 <template>
-<van-nav-bar
-    :title="title"
-    left-text="返回"
-    left-arrow
-    @click-left="back"
-  />
+<m-header :title="title"/>
 <div class="login">
   <div class="header">
     <img src="../../assets/img/logo.jpg" alt="">
@@ -43,12 +38,16 @@
 </div>
 </template>
 <script>
+import MHeader from '@/components/MHeader.vue'
 import { reactive,ref, toRefs } from 'vue'
 import {useRouter} from 'vue-router'
 import {request} from '@/util/request.js'
 import {Toast} from 'vant'
 export default {
   name:'forget',
+  components:{
+    MHeader
+  },
   setup(){
     const title = ref("忘记密码")
     // 定义user对象
@@ -83,9 +82,6 @@ export default {
       Toast.success("密码修改成功，请重新登录")
       router.replace('/login')
     }
-    const back = () =>{
-      router.back()
-    }
     const rePwdmessage = (value)=>{
       if(value != user.password){
         return '两次密码不一致，请重新输入'
@@ -98,7 +94,6 @@ export default {
       title,
       ...toRefs(user),
       onSubmit,
-      back,
       rePwdmessage,
       toggleAgree
     }
@@ -106,9 +101,6 @@ export default {
 }
 </script>
 <style lang="less" scoped>
-:deep(.van-icon), :deep(.van-nav-bar__text){
-        color: #000;
-      }
 .login{
   margin-top: 15vh;
   display: flex;

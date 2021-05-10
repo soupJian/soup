@@ -1,14 +1,7 @@
 <template>
 <div>
   <div class="header">
-    <van-nav-bar
-    title="创建群聊"
-    left-text="返回"
-    right-text="完成"
-    left-arrow
-    @click-left="back"
-    @click-right="upload"
-  />
+    <m-header :right="flag" title="创建群聊" rightText="完成" @handleRight="rightHandle" />
   </div>
 </div>
 <van-form>
@@ -39,17 +32,22 @@
 </van-form>
 </template>
 <script>
+import MHeader from '@/components/MHeader.vue'
 import {Toast} from 'vant'
-import { computed, reactive, toRefs } from 'vue';
+import { computed, reactive, toRefs,ref } from 'vue';
 import { useRouter } from 'vue-router'
 import {request} from '@/util/request.js'
 import { useStore } from 'vuex';
 import $socket from '@/util/socket'
 
 export default {
+  components:{
+    MHeader
+  },
   setup(){
     // 定义路由
     const router = useRouter()
+    const flag = ref(true)
     // vuex
     const store = useStore()
     const user = computed(()=>store.state.user)
@@ -59,10 +57,7 @@ export default {
       groupname: '',
       description: ''
     })
-    const back = ()=>{
-      router.back()
-    }
-    const upload = async() =>{
+    const rightHandle = async() =>{
       if(state.fileList.length == 0){
         Toast.fail({
           message: '请上传群logo',
@@ -115,9 +110,8 @@ export default {
     }
     return{
       ...toRefs(state),
-      back,
-      upload,
-      
+      flag,
+      rightHandle
     }
   }
 }
@@ -125,9 +119,6 @@ export default {
 <style lang="less" scoped>
 .header{
   margin-bottom: 30px;
-  :deep(.van-icon), :deep(.van-nav-bar__text){
-          color: #000;
-  }
 }
 .upload{
   display: flex;

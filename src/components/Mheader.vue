@@ -1,10 +1,21 @@
 <template>
   <van-nav-bar
+    v-if="right"
+    :title="title"
+    :left-text="leftText"
+    :right-text="rightText"
+    left-arrow
+    @click-right="handleRight"
+    @click-left="back"
+  />
+  <van-nav-bar
+    v-else
     :title="title"
     :left-text="leftText"
     left-arrow
     @click-left="back"
   />
+  
 </template>
 <script>
 import { useRouter } from 'vue-router'
@@ -14,18 +25,32 @@ export default {
       type: String,
       required: true
     },
+    left:{
+      type:Boolean,
+      default: true
+    },
+    right:{
+      type:Boolean,
+      default: false
+    },
     leftText:{
       type:String,
       default: '返回'
+    },
+    rightText:{
+      type:String
     }
   },
-  setup(){
-    console.log(123)
+  emits:['handleRight'],
+  setup(props,ctx){
     const router = useRouter()
     const back = ()=>{
       router.back()
     }
-    return {back}
+    const handleRight = () =>{
+      ctx.emit('handleRight')
+    }
+    return {back,handleRight}
   }
 }
 </script>

@@ -12,7 +12,7 @@
   <bottom-serve @socketPostOneChat="socketPostOneChat"/>
 </template>
 <script>
-import MHeader from '@/components/Mheader'
+import MHeader from '@/components/MHeader'
 import ChatList from './components/ChatList'
 import BottomServe from './components/BottomServe'
 import { computed, onMounted,onActivated, reactive, toRefs,watch,ref} from 'vue'

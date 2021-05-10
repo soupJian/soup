@@ -1,5 +1,5 @@
 <template>
-  <m-header :title="fuser.nick"/>
+  <m-header :title="chatObj.nick"/>
   <van-pull-refresh v-model="refreshing" @refresh="onRefresh" class="content" ref="content">
     <van-list
       v-model:loading="loading"
@@ -9,16 +9,17 @@
       <chat-list :chatArray="chatArray"/>
     </van-list>
   </van-pull-refresh>
-  <bottom-serve @socketPostOneChat="socketPostOneChat"/>
+  <bottom-serve @socketPostChat="socketPostChat"/>
 </template>
 <script>
 import MHeader from '@/components/MHeader'
 import ChatList from './components/ChatList'
 import BottomServe from './components/BottomServe'
-import { computed, onMounted,onActivated, reactive, toRefs,watch,ref} from 'vue'
+import { computed,onActivated, reactive, toRefs,watch,ref} from 'vue'
 import { useStore } from 'vuex'
 import {request} from '@/util/request.js'
 import $socket from '@/util/socket'
+import { useRoute } from 'vue-router'
 
 export default {
   components:{
@@ -31,9 +32,39 @@ export default {
     const store = useStore()
     // 用户
     const user = computed(()=>store.state.user)
-    // 聊天对象
-    const fuser = computed(()=>store.state.fuser)
-    const id = computed(()=>store.state.fuser.id)
+    // 路由对象
+    const route = useRoute()
+    const name = ref(route.name)
+
+    const chatObj = computed(()=>{
+      if(name.value == "userChatDetail"){
+        return store.state.fuser
+      }else{
+        return store.state.group
+      }
+    })
+    // 请求路由
+    const url = computed(()=>{
+      if(name.value == "userChatDetail"){
+        return '/chat/user'
+      }else{
+        return '/chat/group'
+      }
+    })
+    // 请求参数
+    const params = computed(()=>{
+      if(name.value == "userChatDetail"){
+        return {
+          uid: user.value.id,
+          fid: chatObj.value.id
+        }
+      }else{
+        return {
+          id: chatObj.value.id
+        }
+      }
+    })
+    const id = computed(()=>chatObj.value.id)
     const state = reactive({
       chatArray:[],
       loading: true,
@@ -48,11 +79,8 @@ export default {
       }
       const {data: result} = await request({
         methods: 'get',
-        url: '/chat',
-        params:{
-          uid: user.value.id,
-          fid: fuser.value.id
-        }
+        url: url.value,
+        params: params.value,
       })
       state.chatArray = result
       state.loading = false;
@@ -77,26 +105,29 @@ export default {
         },0)
     }
     // 用户向socket发送消息
-    const socketPostOneChat = (message) =>{
-      $socket.emit('postOneChat',{
-        user:{
-          id: user.value.id,
-          nick: user.value.nick,
-          picUrl: user.value.picUrl
-        },
-        fuser:{
-          id: fuser.value.id,
-          nick: fuser.value.nick,
-          picUrl: fuser.value.picUrl
-        },
-        type: 0,
-        msg: message
-      })
+    const socketPostChat = (message) =>{
+      if(url.value == '/chat/user'){
+        $socket.emit('postOneChat',{
+          user:{
+            id: user.value.id,
+            nick: user.value.nick,
+            picUrl: user.value.picUrl
+          },
+          fuser:{
+            id: chatObj.value.id,
+            nick: chatObj.value.nick,
+            picUrl: chatObj.value.picUrl
+          },
+          type: 0,
+          msg: message
+        })
+      }else{
+        console.log('123');
+      }
     }
     // 用户接受socket消息
-    const socketReceiveOneChat = ()=>{
-      $socket.on('receiveOneChat',data=>{
-        console.log(data);
+    const socketReceiveChat = ()=>{
+      $socket.on('receiveChat',data=>{
           state.chatArray.push({
             id: data.id,
             time: data.time,
@@ -106,11 +137,10 @@ export default {
           scroll()
       })
     }
-    onMounted(()=>{
-      socketReceiveOneChat()
-    })
     onActivated(()=>{
+      name.value = route.name
       scroll()
+      socketReceiveChat()
     })
     watch(id,()=>{
       state.chatArray = []
@@ -124,8 +154,8 @@ export default {
     return {
       ...toRefs(state),
       content,
-      fuser,
-      socketPostOneChat,
+      chatObj,
+      socketPostChat,
       onLoad,
       onRefresh
     }

@@ -73,7 +73,7 @@ export default {
     }
     const toChatDetail = () =>{
       store.commit("setFuser",state.user)
-      router.push(`/chatdetail/${state.user.id}`)
+      router.push(`/userChatDetail/${state.user.id}`)
     }
     watch(id,()=>{
       if(!id.value){

@@ -44,9 +44,20 @@ export default {
     const user = computed(()=>store.state.user)
     const newsList = computed(()=>props.list)
     const toUser = (item)=>{
-      store.commit("setFuser",item)
-      ctx.emit('readNews',item)
-      router.push(`/chatdetail/${item.id}`)
+      const obj = {
+        id: item.id,
+        nick: item.nick,
+        picUrl: item.picUrl
+      }
+      if(item.type == 0){ // 一对一聊天
+        store.commit("setFuser",obj)
+        ctx.emit('readNews',item)
+        router.push(`/userChatDetail/${item.id}`)
+      }else{ // 群聊天
+        store.commit("setGroup",obj)
+        ctx.emit('readNews',item)
+        router.push(`/groupChatDetail/${item.id}`)
+      }
     }
     return{
       user,

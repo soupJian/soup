@@ -12,7 +12,7 @@
     </div>
     <!-- 聊天对象 -->
     <div v-else class="fuser">
-      <img :src="picUrl(item.id)" class="picUrl" @click="toUser(item.id)">
+      <img :src="picUrl(item)" class="picUrl" @click="toUser(item)">
       <div v-if="item.type == 0">
         <p v-html="item.msg" class="msg"></p>
       </div>
@@ -38,13 +38,20 @@ export default {
       router.back()
     }
     // 用户头像
-    const picUrl = (id) =>{
-      return `http://175.24.116.96:3100/user/${id}/-----soupCover======/picUrl.jpg`
+    const picUrl = (item) =>{
+      if(item.groupMsg == 0){
+        return `http://175.24.116.96:3100/group/${item.id}/-----soupCoover======/picUrl.jpg`
+      }else{
+        return `http://175.24.116.96:3100/user/${item.id}/-----soupCover======/picUrl.jpg`
+      }
     }
-    const toUser = (id)=>{
-      router.push(`/user/${id}`)
+    const toUser = (item)=>{
+      if(item.groupMsg){
+        return
+      }else{
+        router.push(`/user/${item.id}`)
+      }
     }
-
     return {
       user,
       back,

@@ -62,7 +62,7 @@ export default {
         if(index >= 0){
           // 如果是自己发送的消息不需要展示右侧远点
           // 如果已经处于用户聊天界面，这里也不需要显示右侧圆点
-          if(data.flag && route.path != `/chatdetail/${data.id}`){ 
+          if(data.flag && route.path != `/userChatDetail/${data.id}` && route.path != `/groupChatDetail/${data.id}`){ 
             bradge = state.list[index].bradge + 1
           }
           state.list.splice(index,1)

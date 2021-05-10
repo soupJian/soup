@@ -75,8 +75,13 @@ const routes = [
     component: () => import('../views/user/ChangeInfo.vue')
   },
   {
-    path: '/chatdetail/:id',
-    name: 'chatdetail',
+    path: '/userChatDetail/:id',
+    name: 'userChatDetail',
+    component:() =>import('../views/chatdetail/UserChat.vue')
+  },
+  {
+    path: '/groupChatDetail/:id',
+    name: 'groupChatDetail',
     component:() =>import('../views/chatdetail/UserChat.vue')
   }
 ]

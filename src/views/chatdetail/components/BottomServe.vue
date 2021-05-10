@@ -11,7 +11,7 @@
         contenteditable
       />
       <van-button :color="message.length > 0 ? '#0089FF': '#7EC0F9'" 
-        class="right-button" @click="socketPostOneChat">发送</van-button>
+        class="right-button" @click="socketPostChat">发送</van-button>
     </div>
     <div class="serve-wrap">
       <van-icon name="volume-o" class="left-icon" size="20" />
@@ -27,13 +27,13 @@ import { ref } from 'vue'
 export default {
   setup(props,ctx){
     const message = ref('')
-    const socketPostOneChat = ()=>{
-      ctx.emit('socketPostOneChat',message.value)
+    const socketPostChat = ()=>{
+      ctx.emit('socketPostChat',message.value)
       message.value = ''
     }
     return {
       message,
-      socketPostOneChat
+      socketPostChat
     }
   }
 }

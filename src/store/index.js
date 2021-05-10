@@ -3,7 +3,8 @@ import { createStore } from 'vuex'
 export default createStore({
   state: {
     user: JSON.parse(localStorage.getItem('user')) || {}, // 用户信息
-    fuser: JSON.parse(localStorage.getItem('fuser')) || {}, // 一对一聊天对象信息
+    fuser: {}, // 一对一聊天对象信息
+    group: {}, // 群聊对象信息
     friends: JSON.parse(localStorage.getItem('friends')) || [] ,// 用户好友列表
     createGroup: JSON.parse(localStorage.getItem('creategroup')) || [], // 用户创建的群
     addgroup: JSON.parse(localStorage.getItem('addgroup')) || [], // 用户加入的群
@@ -19,11 +20,9 @@ export default createStore({
     },
     setFuser(state,fuser){
       state.fuser = fuser
-      if(fuser.id){
-        localStorage.setItem('fuser',JSON.stringify(fuser))
-      }else{
-        localStorage.removeItem('fuser')
-      }
+    },
+    setGroup(state,group){
+      state.group = group
     },
     setAddCroup(state,addgroup){
       state.addgroup = addgroup
@@ -52,6 +51,7 @@ export default createStore({
     resetVuex(state){
       state.user = {}
       state.fuser = {}
+      state.group = {}
       state.friends = []
       state.createGroup = []
       state.addgroup = []

@@ -1,4 +1,5 @@
 <template>
+<div class="friend-wrap">
   <van-index-bar >
     <div v-for="item of friendsObj" :key="item[0]">
       <van-index-anchor :index="item[0]"/>
@@ -8,6 +9,7 @@
       </div>
     </div>
   </van-index-bar>
+</div>
 </template>
 <script>
 import { computed } from 'vue';
@@ -23,14 +25,9 @@ export default {
      const friendsObj = computed(()=> {
         //  获取所有的好友
         let arr = friend.value
-        const list = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z']
         arr.forEach( item =>{
           item.pinyin = pinyin(item.nick)[0][0] // 可以自行选择不同的生成拼音方案和风格。
           item.key = item.pinyin[0].toUpperCase()
-          if(list.indexOf(item.pinyin[0]) == -1){
-            item.pinyin = '#',
-            item.key = "#"
-          }
         });
         // 按照首字母进行排序
         arr.sort((a,b)=>{
@@ -56,6 +53,17 @@ export default {
 <style lang="less" scoped>
 :deep(.van-index-anchor){
   background: #F5F6FA;
+}
+// :deep(.van-index-anchor--sticky){
+//   top: 100px;
+// }
+.friend-wrap{
+  position: fixed;
+  top: 100px;
+  left: 0;
+  right: 0;
+  bottom: 50px;
+  overflow: scroll;
 }
 .item{
   padding: 10px;

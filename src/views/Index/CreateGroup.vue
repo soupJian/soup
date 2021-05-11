@@ -83,7 +83,7 @@ export default {
           }
         })
         store.commit('setCreateGroup',result.creategroup)
-        socketReseiveGroup()
+        socketPostGroup()
         Toast.success({
           message: result.msg,
           position: 'top',
@@ -91,8 +91,9 @@ export default {
         router.back()
       }
     }
-    const socketReseiveGroup = () =>{
+    const socketPostGroup = () =>{
       const group = creategroup.value[creategroup.value.length -1]
+      $socket.emit('group',group.id)
       $socket.emit('postGroupChat',{
         user:{
           id: user.value.id,
@@ -104,6 +105,8 @@ export default {
           nick: group.nick,
           picUrl: group.picUrl
         },
+        nick: group.nick,
+        nickStr: group.nick,
         type: 0,
         groupMsg: 0, // 是否为群发布消息 0 是 1 不是
         msg: '创建群聊成功，快去邀请小伙伴加入群聊吧'

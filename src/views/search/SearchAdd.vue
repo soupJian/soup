@@ -27,7 +27,7 @@
       </div>
     </div>
     <div v-if="!actionFriends(item)">
-      <button @click.stop="add(item)">+关注</button>
+      <button @click.stop="addfriend(item)">+关注</button>
     </div>
   </div>
 </div>
@@ -36,11 +36,14 @@
   <div class="item-wrap" v-for="item of grouplist" :key="item.id">
     <div class="item">
       <img :src="item.picUrl" alt="">
-      <span v-html="item.nick"></span>
+      <div>
+        <p v-html="item.nickStr"></p>
+        <p v-html="item.idStr"></p>
+      </div>
     </div>
-    <button>
-      {{type==1?'+群聊':'已添加'}}
-    </button>
+    <div v-if="!actionGroups(item)">
+      <button @click.stop="joingroup(item)">+关注</button>
+    </div>
   </div>
 </div>
 </template>
@@ -49,6 +52,9 @@ import { reactive, toRefs,watch,computed } from 'vue'
 import { useRouter } from 'vue-router'
 import {request} from '@/util/request.js'
 import addFriends from '@/util/addfriend.js'
+import addGroups from '@/util/addgroup.js'
+import $socket from '@/util/socket'
+
 import { useStore } from 'vuex'
 import {Toast} from 'vant'
 
@@ -56,7 +62,12 @@ export default {
   setup(){
     const router = useRouter()
     const store = useStore()
+    // 用户好友
     const friends = computed(()=>store.state.friends)
+    // 用户创建的群
+    const creategroup = computed(()=>store.state.creategroup)
+    // 用户加入的群
+    const addgroup = computed(()=>store.state.addgroup)
     const user = computed(()=>store.state.user)
     const state = reactive({
       value: '', // 搜索框的值
@@ -112,13 +123,7 @@ export default {
     const toUser = (id) =>{
       router.push(`/user/${id}`)
     }
-    const add = async (item) =>{
-      const index = friends.value.findIndex(i=>{
-        return i.id == item.id
-      })
-      if(index >= 0){
-        return
-      }
+    const addfriend = async (item) =>{
       const {data: result} = await addFriends(item,user)
       store.commit('setFriends',result.data.friends)
       Toast.success('添加好友成功')
@@ -133,12 +138,58 @@ export default {
         return false
       }
     }
+    const joingroup = async(item) =>{
+      const {data: result} = await addGroups(item,user.value)
+      console.log(result);
+      store.commit('setAddGroup',result)
+      Toast.success('添加群聊成功')
+      socketPostGroup(item)
+    }
+    const actionGroups = (item) =>{
+      // 判断是否为用户创建的群
+      let createIndex,addIndex
+      if(creategroup.value.length > 0){
+        createIndex = creategroup.value.findIndex(i=>{
+          return i.id == item.id
+        })
+      }
+      // 判断是否为用户加入的群
+      if(addgroup.value.length > 0){
+        addIndex = addgroup.value.findIndex(i=>{
+          return i.id == item.id
+        })
+      }
+      if(createIndex >= 0 || addIndex >= 0){
+        return true
+      }else{
+        return false
+      }
+    }
+    const socketPostGroup = (item) =>{
+      $socket.emit('group',item.id)
+      $socket.emit('postGroupChat',{
+        user:{
+          id: user.value.id,
+          nick: user.value.nick,
+          picUrl: user.value.picUrl
+        },
+        group:{
+          id: item.id,
+          nick: item.nick,
+          picUrl: item.picUrl
+        },
+        type: 0,
+        nick: item.nick,
+        nickStr: item.nick,
+        groupMsg: 0, // 是否为群发布消息 0 是 1 不是
+        msg: `${user.value.nick}加入群聊，大家欢迎~~~撒花`
+      })
+    }
     // watch
     watch(()=>state.value,()=>{
       if(state.value == ''){
         return
       }else{
-        console.log(state.value);
         clearTimeout(state.timer)
         setTimeout(()=>{
           search()
@@ -153,8 +204,10 @@ export default {
       onCancel,
       changeType,
       toUser,
-      add,
-      actionFriends
+      addfriend,
+      joingroup,
+      actionFriends,
+      actionGroups,
     }
   }
 }

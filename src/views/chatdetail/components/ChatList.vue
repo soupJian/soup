@@ -3,17 +3,19 @@
     <!-- 自己本人 -->
     <div v-if="item.id == user.id" class="user">
       <div v-if="item.type == 0">
+        <span>{{item.nick}}</span>
         <p v-html="item.msg" class="msg"></p>
       </div>
       <div v-if="item.type == 1">
         <img :src="item.msg" class="msgImg">
       </div>
-      <img :src="user.picUrl" class="picUrl" @click="toUser(user.id)">
+      <img :src="user.picUrl" class="picUrl" @click="toUser(user)">
     </div>
     <!-- 聊天对象 -->
     <div v-else class="fuser">
       <img :src="picUrl(item)" class="picUrl" @click="toUser(item)">
       <div v-if="item.type == 0">
+        <span>{{item.nick}}</span>
         <p v-html="item.msg" class="msg"></p>
       </div>
       <div v-if="item.type == 1">
@@ -46,7 +48,7 @@ export default {
       }
     }
     const toUser = (item)=>{
-      if(item.groupMsg){
+      if(item.groupMsg == 0){
         return
       }else{
         router.push(`/user/${item.id}`)

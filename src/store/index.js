@@ -24,7 +24,7 @@ export default createStore({
     setGroup(state,group){
       state.group = group
     },
-    setAddCroup(state,addgroup){
+    setAddGroup(state,addgroup){
       state.addgroup = addgroup
       if(addgroup.length>0){
         localStorage.setItem('addgroup',JSON.stringify(addgroup))

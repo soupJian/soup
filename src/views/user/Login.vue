@@ -74,7 +74,7 @@ export default {
         store.commit('setUser',result.data.user)
         store.commit('setFriends',result.data.friends)
         store.commit('setCreateGroup',result.data.creategroup)
-        store.commit('setAddCroup',result.data.addgroup)
+        store.commit('setAddGroup',result.data.addgroup)
         $socket.emit('online',result.data.user.id)
       }else{
         Toast.clear()

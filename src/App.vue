@@ -20,18 +20,20 @@ export default {
     const addgroup = computed(()=>store.state.addgroup)
     // 用户已经登陆过，下次进来自动进行socket连接
     onMounted(()=>{
-      $socket.emit('online',user.value.id)
-      if(creategroup.value.length > 0){
-        creategroup.value.forEach(item => {
-          $socket.emit('group',item.id)
-        });
+      if(user.value.id){
+        $socket.emit('online',user.value.id)
+        if(creategroup.value.length > 0){
+          creategroup.value.forEach(item => {
+            $socket.emit('group',item.id)
+          });
+        }
+        if(addgroup.value.length>0){
+          addgroup.value.forEach(item => {
+            $socket.emit('group',item.id)
+          });
+        }
+        router.replace('/index')
       }
-      if(addgroup.value.length>0){
-        addgroup.value.forEach(item => {
-          $socket.emit('group',item.id)
-        });
-      }
-      router.replace('/index')
     })
   }
 }

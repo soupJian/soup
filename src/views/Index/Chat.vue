@@ -2,7 +2,7 @@
   <List :list="list" @delete="handleDelete" @readNews="handleReadNews"></List>
 </template>
 <script>
-import { computed, onMounted, reactive, toRefs } from 'vue'
+import { computed, onMounted, reactive, toRefs, watch } from 'vue'
 import List from './components/List'
 import $socket from '@/util/socket'
 import {request} from '@/util/request.js'
@@ -17,6 +17,8 @@ export default {
     const store = useStore()
     const route = useRoute()
     const user = computed(()=>store.state.user)
+    // 利用id；来判断用户是否切换了账号
+    const id = computed(()=>user.value.id)
     const state = reactive({
       list:[]
     })
@@ -83,6 +85,13 @@ export default {
     onMounted(()=>{
       getNewsList()
       receiveNewsList()
+    })
+    watch(id,()=>{
+      console.log(id.value);
+      if(id.value){
+        getNewsList()
+        receiveNewsList()
+      }
     })
     return{
       ...toRefs(state),

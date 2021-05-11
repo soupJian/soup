@@ -122,7 +122,21 @@ export default {
           msg: message
         })
       }else{
-        console.log('123');
+        $socket.emit('postGroupChat',{
+          user:{
+            id: user.value.id,
+            nick: user.value.nick,
+            picUrl: user.value.picUrl
+          },
+          group:{
+            id: chatObj.value.id,
+            nick: chatObj.value.nick,
+            picUrl: chatObj.value.picUrl
+          },
+          type: 0,
+          groupMsg: 1, // 是否为群发布消息 0 是 1 不是
+          msg: message
+        })
       }
     }
     // 用户接受socket消息

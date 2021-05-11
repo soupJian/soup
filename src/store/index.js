@@ -6,7 +6,7 @@ export default createStore({
     fuser: {}, // 一对一聊天对象信息
     group: {}, // 群聊对象信息
     friends: JSON.parse(localStorage.getItem('friends')) || [] ,// 用户好友列表
-    createGroup: JSON.parse(localStorage.getItem('creategroup')) || [], // 用户创建的群
+    creategroup: JSON.parse(localStorage.getItem('creategroup')) || [], // 用户创建的群
     addgroup: JSON.parse(localStorage.getItem('addgroup')) || [], // 用户加入的群
   },
   mutations: {

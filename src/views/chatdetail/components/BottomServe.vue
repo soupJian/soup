@@ -59,7 +59,7 @@ export default {
     }
   }
   .serve-wrap{
-    margin-top: 10px;
+    padding: 10px 0;
     display: flex;
     justify-content: space-between;
   }

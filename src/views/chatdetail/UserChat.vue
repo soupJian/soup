@@ -95,7 +95,7 @@ export default {
     // 滚动到底部
     const scroll = () =>{
       // window.screen.height 屏幕高度 130是头部导航栏和底部输入框区域
-        const contentHeight = window.screen.height - 130 
+        const contentHeight = window.screen.height - 140 
         // 采用定时器0,解决输入后获取的还是上一个的高度
         setTimeout(()=>{
           // 滚动的高度 + 1000 是为了让滚动直接滚动到底部，模拟器正常，手机网页不正常
@@ -182,7 +182,7 @@ export default {
   background: #EAEDF4;
   position: fixed;
   top: 46px;
-  bottom: 84px;
+  bottom: 94px;
   left: 0;
   right: 0;
   overflow: scroll;

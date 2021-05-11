@@ -1,9 +1,21 @@
 <template>
 <div class="find">
   <div class="block" v-for="(list,index) of array" :key="index">
-    <div class='item' v-for="item of list.array" :key="item.id">
-      <img :src="item.imgUrl">
-      <span>{{item.name}}</span>
+    <div v-if="list.type == 0">
+      <div class='item' v-for="item of list.array" :key="item.id">
+        <router-link :to="item.url">
+          <img :src="item.imgUrl">
+          <span>{{item.name}}</span>
+        </router-link>
+      </div>
+    </div>
+    <div v-if="list.type == 1">
+      <div class='item' v-for="item of list.array" :key="item.id">
+        <a :href="item.url" target="_blank">
+          <img :src="item.imgUrl">
+          <span>{{item.name}}</span>
+        </a>
+      </div>
     </div>
   </div>
 </div>
@@ -14,12 +26,7 @@ import {request} from '@/util/request.js'
 export default {
   setup(){
     const state = reactive({
-      array: [
-        {cloudSpace: []},
-        {workspace: []},
-        {codespace: []},
-        {contactspace: []}
-      ]
+      array: []
     })
     const getFind = async() => {
       const {data: result} = await request({

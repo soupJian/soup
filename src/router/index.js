@@ -83,7 +83,22 @@ const routes = [
     path: '/groupChatDetail/:id',
     name: 'groupChatDetail',
     component:() =>import('../views/chatdetail/UserChat.vue')
-  }
+  },
+  {
+    path: '/cloud',
+    name: 'cloud',
+    component:() =>import('../views/cloud/Index.vue')
+  },
+  {
+    path: '/qq',
+    name: 'qq',
+    component:() =>import('../views/user/QQ.vue')
+  },
+  {
+    path: '/wx',
+    name: 'wx',
+    component:() =>import('../views/user/WX.vue')
+  },
 ]
 
 const router = createRouter({

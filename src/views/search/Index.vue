@@ -1,31 +1,34 @@
 <template>
-  <van-search
-  v-model="value"
+<van-search
+  v-model="keyword"
+  show-action
   shape="round"
   placeholder="请输入搜索关键词"
+  @search="handleSearch"
+  @cancel="handleCancel"
 />
 <van-empty description="功能暂未完善，开发中..." />
 </template>
 <script>
-import { ref,reactive,toRefs } from 'vue';
-import {request} from '@/util/request'
+import { reactive, toRefs } from 'vue';
+import { useRouter } from 'vue-router';
+// import {request} from '@/util/request'
 export default {
   setup() {
-    const value = ref('');
+    const router = useRouter()
     const state = reactive({
-      historySearch:[]
+      keyword: '' // 搜索关键字
     })
-    // 历史搜索 五位搜索用户
-    const getHistory = async() =>{
-      const {data: result} = request({
-        url:'/search/historySearch',
-      })
-      console.log(result);
+    const handleSearch = (val) =>{
+      state.keyword = val
+    }
+    const handleCancel = () =>{
+      router.back()
     }
     return {
       ...toRefs(state),
-      value,
-      getHistory 
+      handleSearch,
+      handleCancel 
     };
   },
 }

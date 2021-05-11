@@ -6,7 +6,7 @@
     </keep-alive>
 </router-view>
 <van-tabbar v-model="active" route>
-  <van-tabbar-item name="chat" icon="chat" to="/chat">消息</van-tabbar-item>
+  <van-tabbar-item name="chat" icon="chat" to="/newslist">消息</van-tabbar-item>
   <van-tabbar-item name="friends" icon="friends" to="/friends">通讯录</van-tabbar-item>
   <van-tabbar-item name="find" icon="fire" to="/find">发现</van-tabbar-item>
 </van-tabbar>

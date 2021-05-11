@@ -10,12 +10,12 @@ const routes = [
     children:[
       {
         path: '/index',
-        redirect: '/chat'
+        redirect: '/newslist'
       },
       {
-        path: '/chat',
-        name: 'chat',
-        component:() => import('../views/Index/Chat.vue'),
+        path: '/newslist',
+        name: 'newslist',
+        component:() => import('../views/Index/NewsList.vue'),
       },
       {
         path: '/friends',

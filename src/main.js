@@ -28,7 +28,8 @@ import {
   Picker,
   List,
   PullRefresh,
-  SwipeCell 
+  SwipeCell,
+  Collapse, CollapseItem
 } from 'vant'
 
 app.use(Button)
@@ -52,5 +53,7 @@ app.use(Picker);
 app.use(List);
 app.use(PullRefresh)
 app.use(SwipeCell);
+app.use(Collapse);
+app.use(CollapseItem);
 
 

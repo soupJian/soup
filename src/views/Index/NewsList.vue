@@ -56,7 +56,7 @@ export default {
     }
     // 接受socket消息
     const receiveNewsList = ()=>{
-      $socket.on('receiveNewsList',data =>{
+      $socket.on('receiveNewsList',async (data) =>{
         let bradge = 0
         const index = state.list.findIndex(item=>{
           return item.id == data.id
@@ -80,6 +80,17 @@ export default {
           msg: data.msg,
           type: data.type
         })
+        // 由于群聊消息无法进行逐个数据入库，所以需要在首页消息列表中进行数据入库
+        if(data.type == 1){
+          await request({
+            methods: 'post',
+            url: '/newsList',
+            data:{
+              id: user.value.id,
+              list: JSON.stringify(state.list)
+            }
+          })
+        }
       })
     }
     onMounted(()=>{

@@ -28,7 +28,10 @@ export default {
   setup(props,ctx){
     const message = ref('')
     const socketPostChat = ()=>{
-      ctx.emit('socketPostChat',message.value)
+      if(message.value.trim() == ''){
+        return
+      }
+      ctx.emit('socketPostChat',message.value.trim())
       message.value = ''
     }
     return {

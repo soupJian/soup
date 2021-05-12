@@ -98,7 +98,6 @@ export default {
       receiveNewsList()
     })
     watch(id,()=>{
-      console.log(id.value);
       if(id.value){
         getNewsList()
         receiveNewsList()

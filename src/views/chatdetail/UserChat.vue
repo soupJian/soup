@@ -141,7 +141,8 @@ export default {
     }
     // 用户接受socket消息
     const socketReceiveChat = ()=>{
-      $socket.on('receiveChat',data=>{
+      if(url.value == '/chat/user'){
+        $socket.on('receiveChat',data=>{
           state.chatArray.push({
             id: data.id,
             time: data.time,
@@ -149,7 +150,18 @@ export default {
             msg: data.msg
           })
           scroll()
-      })
+        })
+      }else{
+        $socket.on('receiveGroupChat',data=>{
+          state.chatArray.push({
+            id: data.id,
+            time: data.time,
+            type: data.type,
+            msg: data.msg
+          })
+          scroll()
+        })
+      }
     }
     onActivated(()=>{
       name.value = route.name

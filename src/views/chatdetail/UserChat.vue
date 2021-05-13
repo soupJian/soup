@@ -145,32 +145,21 @@ export default {
     }
     // 用户接受socket消息
     const socketReceiveChat = ()=>{
-      if(url.value == '/chat/user'){
-        $socket.on('receiveChat',data=>{
-          state.chatArray.push({
-            id: data.id,
-            time: data.time,
-            type: data.type,
-            msg: data.msg
-          })
-          scroll()
+      $socket.on('receiveChat',data=>{
+        state.chatArray.push({
+          id: data.id,
+          time: data.time,
+          type: data.type,
+          msg: data.msg
         })
-      }else{
-        $socket.on('receiveGroupChat',data=>{
-          state.chatArray.push({
-            id: data.id,
-            time: data.time,
-            type: data.type,
-            msg: data.msg
-          })
-          scroll()
-        })
-      }
+        scroll()
+      })
     }
+    // socket 自调用
+    socketReceiveChat()
     onActivated(()=>{
       name.value = route.name
       scroll()
-      socketReceiveChat()
     })
     watch(id,()=>{
       state.chatArray = []

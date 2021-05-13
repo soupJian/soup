@@ -6,7 +6,7 @@
       <div class="des">
         <p style="margin-bottom: 5px">
           <span class="des-name">{{item.nick}}</span>
-          <span class="des-time">{{item.time}}</span>
+          <span class="des-time">{{fmt(item.time)}}</span>
         </p>
         <p>
           <span class="des-description">{{item.msg}}</span>
@@ -27,6 +27,7 @@
 import { computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'
+import fmt from '@/util/format'
 export default {
   props:{
     list: {
@@ -63,7 +64,8 @@ export default {
       user,
       newsList,
       handleDelete,
-      toUser
+      toUser,
+      fmt
     }
   }
 }

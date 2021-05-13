@@ -1,5 +1,8 @@
 <template>
-  <div class="item" v-for="item of chatArray" :key="item.time">
+  <div class="item" v-for="(item,index) of chatArray" :key="item.time">
+    <p class="time" v-if="showTime(index)">
+      {{fmt(item.time)}}
+    </p>
     <!-- 自己本人 -->
     <div v-if="item.id == user.id" class="user">
       <div v-if="item.type == 0">
@@ -28,12 +31,14 @@
 import { useRouter } from 'vue-router'
 import { computed } from 'vue'
 import { useStore } from 'vuex'
+import fmt from '@/util/format'
 
 export default {
   props:['chatArray'],
-  setup(){
+  setup(props){
     const router = useRouter()
     const store = useStore()
+    const arr = computed(()=>props.chatArray)
     // 用户
     const user = computed(()=>store.state.user)
     const back = () => {
@@ -54,11 +59,24 @@ export default {
         router.push(`/user/${item.id}`)
       }
     }
+    const showTime = (index) =>{
+      if(index == 0){
+        return true
+      }else{
+        if(arr.value[index].time - arr.value[index-1].time < 180000){
+          return false
+        }else{
+          return true
+        }
+      }
+    }
     return {
       user,
       back,
       picUrl,
       toUser,
+      fmt,
+      showTime
     }
   }
 }
@@ -66,6 +84,11 @@ export default {
 <style lang="less" scoped>
 .item{
   margin-bottom: 10px;
+  .time{
+    text-align: center;
+    font-size: 12px;
+    margin: 5px 0;
+  }
   .fuser,.user{
     display: flex;
     .picUrl{

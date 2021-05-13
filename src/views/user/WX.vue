@@ -1,8 +1,10 @@
 <template>
-<div class="wx">
-  <m-header title="微信"/>
-  <img src="../../assets/img/wx.png" alt="">
-</div>
+  <transition name="slide">
+    <div class="wx">
+      <m-header title="微信"/>
+      <img src="../../assets/img/wx.png" alt="">
+    </div>
+  </transition>
 </template>
 <script>
 import MHeader from "@/components/MHeader"
@@ -13,6 +15,12 @@ export default {
 }
 </script>
 <style lang="less" scoped>
+.slide-enter-from,.slide-leave-to {
+      transform: translateX(100%);
+    }
+.slide-enter-active,.slide-leave-active{
+      transition: all 0.5s ease;
+    }
 .wx{
   height: 100vh;
   overflow: hidden;

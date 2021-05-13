@@ -1,6 +1,6 @@
 <template>
 <div class="header">
-<m-header title="编辑资料" rightText="保存" @handleRight="save"/>
+<m-header title="编辑资料" rightText="保存" :right="flag" @handleRight="save"/>
 </div>
 <van-form>
 <van-field
@@ -100,6 +100,7 @@ export default {
   setup(){
     const router = useRouter()
     const store = useStore()
+    const flag = ref(true)
     // user
     const user = ref(JSON.parse(JSON.stringify(store.state.user)))
     const userBase = ref(JSON.parse(JSON.stringify(store.state.user)))
@@ -171,6 +172,7 @@ export default {
     }
     return{
       // data
+      flag,
       columns,
       showPicker,
       onConfirm,

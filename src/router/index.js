@@ -2,6 +2,7 @@ import { createRouter, createWebHashHistory } from 'vue-router'
 const routes = [
   {
     path: '/',
+    name:'home',
     component: () => import('../views/home/Index.vue')
   },
   {
@@ -105,17 +106,14 @@ const router = createRouter({
   history: createWebHashHistory(),
   routes
 })
-// router.beforeEach((to, from, next) => {
-//   if (to.name != 'login' || to.name != 'forget' || to.name != 'register'){
-//     const token = localStorage.getItem('token')
-//     if(token){
-//       next()
-//     }else{
-//       next({ name: 'login' })
-//     }
-//   } else{
-//     next()
-//   }
-// })
+router.beforeEach((to,from,next) => {
+  if ((to.path === '/login') || (to.path === '/register') || (to.path === '/') || (to.path === '/forget')) return next();
+  //获取token
+  const user = localStorage.getItem('user')
+  //没有token，强制跳转登录页
+  if(!user) return next('/')
+  // 放行
+  next()
+})
 
 export default router

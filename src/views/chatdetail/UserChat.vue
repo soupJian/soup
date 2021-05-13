@@ -1,15 +1,19 @@
 <template>
-  <m-header :title="chatObj.nick"/>
-  <van-pull-refresh v-model="refreshing" @refresh="onRefresh" class="content" ref="content">
-    <van-list
-      v-model:loading="loading"
-      @load="onLoad"
-      :finished="finished"
-    >
-      <chat-list :chatArray="chatArray"/>
-    </van-list>
-  </van-pull-refresh>
-  <bottom-serve @socketPostChat="socketPostChat"/>
+  <transition name="slide">
+    <div class="chat">
+      <m-header :title="chatObj.nick"/>
+      <van-pull-refresh v-model="refreshing" @refresh="onRefresh" class="content" ref="content">
+        <van-list
+          v-model:loading="loading"
+          @load="onLoad"
+          :finished="finished"
+        >
+          <chat-list :chatArray="chatArray"/>
+        </van-list>
+      </van-pull-refresh>
+      <bottom-serve @socketPostChat="socketPostChat"/>
+    </div>
+  </transition>
 </template>
 <script>
 import MHeader from '@/components/MHeader'
@@ -189,6 +193,20 @@ export default {
 }
 </script>
 <style lang="less" scoped>
+.slide-enter-from,.slide-leave-to {
+      transform: translateX(100%);
+    }
+.slide-enter-active,.slide-leave-active{
+      transition: all 0.5s ease;
+    }
+.chat{
+  position: fixed;
+  top:0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  z-index: 1;
+}
 .content{
   padding: 10px;
   background: #EAEDF4;

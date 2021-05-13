@@ -21,7 +21,7 @@
     </p>
     <p>
       <van-icon name="label-o" size="20"/>
-      <span>{{user.signature == '' ? '这家伙很烂什么也没有留下!': user.signature}}</span>
+      <span>{{user.signature == '' ? '这家伙很懒什么也没有留下!': user.signature}}</span>
     </p>
     <p>
       <van-icon name="bulb-o" size="20"/>

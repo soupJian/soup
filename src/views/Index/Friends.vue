@@ -43,9 +43,10 @@ export default {
         //  获取所有的好友
         let arr = friend.value
         arr.forEach( item =>{
-          item.pinyin = pinyin(item.nick)[0][0] // 可以自行选择不同的生成拼音方案和风格。
+          item.pinyin = pinyin(item.nick)[0][0]
           item.key = item.pinyin[0].toUpperCase()
         });
+        console.log(arr);
         // 按照首字母进行排序
         arr.sort((a,b)=>{
           return a.pinyin.localeCompare(b.pinyin);

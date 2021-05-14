@@ -88,7 +88,7 @@
 <script>
 import MHeader from '@/components/MHeader'
 
-import { ref } from 'vue'
+import { onActivated, ref } from 'vue'
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
 import {request} from '@/util/request.js'
@@ -181,6 +181,10 @@ export default {
         Toast.fail(result.msg);
       }
     }
+    onActivated(()=>{
+      user.value = JSON.parse(JSON.stringify(store.state.user))
+      userBase.value = JSON.parse(JSON.stringify(store.state.user))
+    })
     return{
       // data
       flag,

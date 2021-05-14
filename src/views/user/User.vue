@@ -32,19 +32,21 @@
       <span>留言</span>
     </p>
   </div>
-  <div class="button-wrap">
+  <div class="button-wrap" v-if="show">
     <van-button plain type="primary" @click="addFriend">加好友</van-button>
     <van-button type="primary" @click="toChatDetail">发消息</van-button>
   </div>
-  <!-- <div class="button-wrap">
-    <van-button type="primary">发消息</van-button>
-  </div> -->
+  <div class="button-wrap" v-else>
+    <van-button class="primaryButton" type="primary">发消息</van-button>
+  </div>
 </template>
 <script>
 import { useRoute, useRouter } from 'vue-router'
 import {request} from '@/util/request.js'
 import { computed,onMounted,reactive,toRefs,watch } from 'vue'
 import { useStore } from 'vuex'
+import addFriends from '@/util/addfriend.js'
+import {Toast} from 'vant'
 
 export default {
   setup(){
@@ -52,8 +54,11 @@ export default {
     const router = useRouter()
     const store = useStore()
     const id = computed(()=>route.params.id)
+    const friends = computed(()=>store.state.friends)
+    const user = computed(()=>store.state.user)
     const state = reactive({
-      user: {}
+      user: {},
+      show: true
     })
     const getUserDetail = async()=>{
       const {data: result} = await request({
@@ -64,12 +69,26 @@ export default {
         },
       })
       state.user = result
+      state.show = checkfriends()
     }
     const back = ()=>{
       router.back()
     }
-    const addFriend = () =>{
-      console.log(state.user);
+    const checkfriends = ()=>{
+      const index = friends.value.findIndex(item=>{
+        return item.id == state.user.id
+      })
+      if(index >= 0){
+        return false
+      }else{
+        return true
+      }
+    }
+    const addFriend = async() =>{
+      const {data: result} = await addFriends(state.user,user)
+      store.commit('setFriends',result.data.friends)
+      Toast.success('添加好友成功')
+      state.show = checkfriends()
     }
     const toChatDetail = () =>{
       store.commit("setFuser",state.user)
@@ -154,6 +173,9 @@ export default {
     justify-content: space-around;
     button{
       width: 40%;
+      &.primaryButton{
+        width: 80%;
+      }
     }
   }
 </style>

@@ -187,7 +187,6 @@ export default {
         },
         type: 0,
         nick: item.nick,
-        nickStr: item.nick,
         groupMsg: 0, // 是否为群发布消息 0 是 1 不是
         msg: `${user.value.nick}加入群聊，大家欢迎~~~撒花`
       })

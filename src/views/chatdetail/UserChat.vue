@@ -1,7 +1,7 @@
 <template>
   <transition name="slide">
     <div class="chat">
-      <m-header v-if="flag" :title="chatObj.nick" rightText="详情" :right="flag" @handleRight="handleRight"/>
+      <m-header v-if="flag" :title="chatObj.nick || ''" rightText="详情" :right="flag" @handleRight="handleRight"/>
       <m-header :title="chatObj.nick" v-else/>
       <van-pull-refresh v-model="refreshing" @refresh="onRefresh" class="content" ref="content">
         <van-list
@@ -147,6 +147,7 @@ export default {
             picUrl: chatObj.value.picUrl
           },
           type,
+          nick: user.value.nick,
           groupMsg: 1, // 是否为群发布消息 0 是 1 不是
           msg: message
         })
@@ -155,12 +156,13 @@ export default {
     // 用户接受socket消息
     const socketReceiveChat = ()=>{
       $socket.on('receiveChat',data=>{
-        if(data.groupMsg){
+        if(data.groupMsg == 0){
           state.chatArray.push({
             id: data.id,
             time: data.time,
             type: data.type,
             msg: data.msg,
+            nick: data.nick,
             groupMsg: data.groupMsg
           })
         }else{

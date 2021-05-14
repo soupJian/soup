@@ -106,7 +106,6 @@ export default {
           picUrl: group.picUrl
         },
         nick: group.nick,
-        nickStr: group.nick,
         type: 0,
         groupMsg: 0, // 是否为群发布消息 0 是 1 不是
         msg: '创建群聊成功，快去邀请小伙伴加入群聊吧'

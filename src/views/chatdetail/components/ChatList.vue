@@ -5,8 +5,8 @@
     </p>
     <!-- 自己本人 -->
     <div v-if="item.id == user.id" class="user">
-      <div v-if="item.type == 0">
-        <span>{{item.nick}}</span>
+      <div v-if="item.type == 0" class="user-item">
+        <span v-if="item.nick">{{item.nick}}</span>
         <p v-html="item.msg" class="msg"></p>
       </div>
       <div v-if="item.type == 1">
@@ -17,8 +17,8 @@
     <!-- 聊天对象 -->
     <div v-else class="fuser">
       <img :src="picUrl(item)" class="picUrl" @click="toUser(item)">
-      <div v-if="item.type == 0">
-        <span>{{item.nick}}</span>
+      <div v-if="item.type == 0" class="fuser-item">
+        <span v-if="item.nick">{{item.nick}}</span>
         <p v-html="item.msg" class="msg"></p>
       </div>
       <div v-if="item.type == 1">
@@ -123,6 +123,24 @@ export default {
       margin-right: 10px;
       background: #1989FA;
       color: #fff;
+    }
+  }
+  .fuser-item,.user-item{
+    display: flex;
+    flex-direction: column;
+  }
+  .fuser-item{
+    span{
+      padding-left: 10px;
+      margin-bottom: 5px;
+      align-self: flex-start;
+    }
+  }
+  .user-item{
+    span{
+      margin-bottom: 5px;
+      padding-right: 10px;
+      align-self: flex-end;
     }
   }
 }

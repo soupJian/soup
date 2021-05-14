@@ -42,11 +42,14 @@ export default {
      const friendsObj = computed(()=> {
         //  获取所有的好友
         let arr = friend.value
+        let keyArr = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z']
         arr.forEach( item =>{
           item.pinyin = pinyin(item.nick)[0][0]
           item.key = item.pinyin[0].toUpperCase()
+          if(keyArr.indexOf(item.key) < 0){
+            item.key = "#"
+          }
         });
-        console.log(arr);
         // 按照首字母进行排序
         arr.sort((a,b)=>{
           return a.pinyin.localeCompare(b.pinyin);

@@ -1,7 +1,8 @@
 <template>
   <transition name="slide">
     <div class="chat">
-      <m-header :title="chatObj.nick"/>
+      <m-header v-if="flag" :title="chatObj.nick" rightText="详情" :right="flag" @handleRight="handleRight"/>
+      <m-header :title="chatObj.nick" v-else/>
       <van-pull-refresh v-model="refreshing" @refresh="onRefresh" class="content" ref="content">
         <van-list
           v-model:loading="loading"
@@ -23,7 +24,7 @@ import { computed,onActivated, reactive, toRefs,watch,ref} from 'vue'
 import { useStore } from 'vuex'
 import {request} from '@/util/request.js'
 import $socket from '@/util/socket'
-import { useRoute } from 'vue-router'
+import { useRoute,useRouter } from 'vue-router'
 
 export default {
   components:{
@@ -38,8 +39,16 @@ export default {
     const user = computed(()=>store.state.user)
     // 路由对象
     const route = useRoute()
+    const router = useRouter()
     const name = ref(route.name)
-
+    // 右上角是否展示
+    const flag = computed(()=>{
+      if(name.value == "userChatDetail"){
+        return false
+      }else{
+        return true
+      }
+    })
     const chatObj = computed(()=>{
       if(name.value == "userChatDetail"){
         return store.state.fuser
@@ -109,7 +118,7 @@ export default {
         },0)
     }
     // 用户向socket发送消息
-    const socketPostChat = (message) =>{
+    const socketPostChat = (message,type) =>{
       if(url.value == '/chat/user'){
         $socket.emit('postOneChat',{
           user:{
@@ -122,7 +131,7 @@ export default {
             nick: chatObj.value.nick,
             picUrl: chatObj.value.picUrl
           },
-          type: 0,
+          type,
           msg: message
         })
       }else{
@@ -137,7 +146,7 @@ export default {
             nick: chatObj.value.nick,
             picUrl: chatObj.value.picUrl
           },
-          type: 0,
+          type,
           groupMsg: 1, // 是否为群发布消息 0 是 1 不是
           msg: message
         })
@@ -146,17 +155,30 @@ export default {
     // 用户接受socket消息
     const socketReceiveChat = ()=>{
       $socket.on('receiveChat',data=>{
-        state.chatArray.push({
-          id: data.id,
-          time: data.time,
-          type: data.type,
-          msg: data.msg
-        })
+        if(data.groupMsg){
+          state.chatArray.push({
+            id: data.id,
+            time: data.time,
+            type: data.type,
+            msg: data.msg,
+            groupMsg: data.groupMsg
+          })
+        }else{
+          state.chatArray.push({
+            id: data.id,
+            time: data.time,
+            type: data.type,
+            msg: data.msg
+          })
+        }
         scroll()
       })
     }
     // socket 自调用
     socketReceiveChat()
+    const handleRight = () =>{
+      router.push(`/group/${chatObj.value.id}`)
+    }
     onActivated(()=>{
       name.value = route.name
       scroll()
@@ -172,11 +194,13 @@ export default {
     })
     return {
       ...toRefs(state),
+      flag,
       content,
       chatObj,
       socketPostChat,
       onLoad,
-      onRefresh
+      onRefresh,
+      handleRight
     }
   }
 }

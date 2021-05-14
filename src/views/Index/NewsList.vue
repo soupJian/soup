@@ -22,8 +22,19 @@ export default {
     const state = reactive({
       list:[]
     })
-    const handleDelete = (item)=>{
-      console.log(item);
+    const handleDelete = async(item)=>{
+      const index = state.list.findIndex(i=>{
+        return i.id == item.id
+      })
+      state.list.splice(index,1)
+      await request({
+        methods: 'post',
+        url: '/newsList',
+        data:{
+          id: user.value.id,
+          list: JSON.stringify(state.list)
+        }
+      })
     }
     // 获取聊天列表
     const getNewsList = async() =>{

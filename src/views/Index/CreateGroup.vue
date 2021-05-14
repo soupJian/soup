@@ -34,7 +34,7 @@
 <script>
 import MHeader from '@/components/MHeader.vue'
 import {Toast} from 'vant'
-import { computed, reactive, toRefs,ref } from 'vue';
+import { computed, reactive, toRefs,ref, onActivated } from 'vue';
 import { useRouter } from 'vue-router'
 import {request} from '@/util/request.js'
 import { useStore } from 'vuex';
@@ -112,6 +112,11 @@ export default {
         msg: '创建群聊成功，快去邀请小伙伴加入群聊吧'
       })
     }
+    onActivated(()=>{
+      state.fileList = []
+      state.groupname = ''
+      state.description = ''
+    })
     return{
       ...toRefs(state),
       flag,

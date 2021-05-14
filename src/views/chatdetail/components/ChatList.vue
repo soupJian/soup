@@ -104,7 +104,7 @@ export default {
     }
     .msgImg{
       max-width: 250px;
-      margin-left: 10px;
+      margin: 0 10px;
     }
   }
   .fuser{

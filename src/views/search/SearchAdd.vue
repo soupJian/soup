@@ -33,7 +33,7 @@
 </div>
 <div class="list" v-show="type == 1">
   <van-empty image="search" description="暂无搜索结果" v-show="grouplist.length == 0" />
-  <div class="item-wrap" v-for="item of grouplist" :key="item.id">
+  <div class="item-wrap" v-for="item of grouplist" :key="item.id" @click="toGroup(item)">
     <div class="item">
       <img :src="item.picUrl" alt="">
       <div>
@@ -123,6 +123,13 @@ export default {
     const toUser = (id) =>{
       router.push(`/user/${id}`)
     }
+    const toGroup = (item) =>{
+      if(!actionGroups(item)){
+        Toast('您还没有加入该群哦，暂无权限!')
+        return
+      }
+      router.push(`/group/${item.id}`)
+    }
     const addfriend = async (item) =>{
       const {data: result} = await addFriends(item,user)
       store.commit('setFriends',result.data.friends)
@@ -140,10 +147,10 @@ export default {
     }
     const joingroup = async(item) =>{
       const {data: result} = await addGroups(item,user.value)
-      console.log(result);
       store.commit('setAddGroup',result)
       Toast.success('添加群聊成功')
       socketPostGroup(item)
+      router.replace('/index')
     }
     const actionGroups = (item) =>{
       // 判断是否为用户创建的群
@@ -204,6 +211,7 @@ export default {
       onCancel,
       changeType,
       toUser,
+      toGroup,
       addfriend,
       joingroup,
       actionFriends,

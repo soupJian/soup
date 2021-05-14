@@ -17,13 +17,16 @@
       <van-icon name="volume-o" class="left-icon" size="20" />
       <van-icon name="location-o" size="20"/>
       <van-icon name="envelop-o" size="20"/>
-      <van-icon name="photo-o" size="20"/>
+      <van-uploader :after-read="upload" max-count="1">
+        <van-icon name="photo-o" size="20" color="blue"/>
+      </van-uploader>
       <van-icon name="tv-o" size="20"/>
     </div>
   </div>
 </template>
 <script>
 import { ref } from 'vue'
+import {request} from '@/util/request.js'
 export default {
   setup(props,ctx){
     const message = ref('')
@@ -31,12 +34,24 @@ export default {
       if(message.value.trim() == ''){
         return
       }
-      ctx.emit('socketPostChat',message.value.trim())
+      ctx.emit('socketPostChat',message.value.trim(),0)
       message.value = ''
+    }
+    const upload = async (file) =>{
+      const {data: result} = await request({
+        methods: 'post',
+        url: '/upload',
+        data:{
+          imgUrl: file.content,
+        }
+      })
+      const message = result.picUrl
+      ctx.emit('socketPostChat',message,1)
     }
     return {
       message,
-      socketPostChat
+      socketPostChat,
+      upload
     }
   }
 }

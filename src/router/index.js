@@ -61,6 +61,11 @@ const routes = [
     component:() => import('../views/user/User.vue'),
   },
   {
+    path: '/group/:id',
+    name: 'group',
+    component:() => import('../views/Index/GroupDetail.vue'),
+  },
+  {
     path:'/searchAdd',
     name:'searchAdd',
     component: () => import('../views/search/SearchAdd.vue')

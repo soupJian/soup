@@ -3,13 +3,13 @@
 <div class="login">
   <div class="header">
     <img src="../../assets/img/logo.jpg" alt="">
-    <span>soup</span>
+    <span>oup</span>
   </div>
   <van-form @submit="onSubmit">
     <van-field
       v-model="oldPassword"
       type="password"
-      name="name"
+      name="oldPassword"
       label="旧密码"
       placeholder="请输入旧密码"
       :rules="[{ required: true, message: '请输入旧密码' }]"
@@ -40,13 +40,20 @@
 </template>
 <script>
 import MHeader from '@/components/MHeader.vue'
-import { reactive,ref, toRefs } from 'vue'
+import { computed, reactive,ref, toRefs } from 'vue'
+import { useStore } from 'vuex'
+import {Toast} from 'vant'
+import {request} from '@/util/request.js'
+import { useRouter } from 'vue-router'
+
 export default {
   components:{
     MHeader
   },
   name:'change',
   setup(){
+    const store = useStore()
+    const router = useRouter()
     const title = ref("修改密码")
     // 定义user对象
     const user = reactive({
@@ -55,13 +62,23 @@ export default {
       repassword: '',
       checkbox: false,
     })
+    const obj = computed(()=>store.state.user)
     // 定义路由
     // 注册提交
-    const onSubmit = (values) =>{
-        if(user.oldPassword == user.newPassword){
-          return
-        }
-        console.log(values);
+    const onSubmit = async(values) =>{
+      const {data: result} = await request({
+        url: '/forget/pwd',
+        methods:'post',
+        data: {
+          id: obj.value.id,
+          oldPassword: values.oldPassword,
+          password: values.newPassword
+        },
+      })
+      Toast(result.msg)
+      if(result.code == 200){
+        router.back()
+      }
     }
     const rePwdmessage = (value)=>{
       if(value != user.newPassword){

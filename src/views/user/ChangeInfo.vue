@@ -104,7 +104,6 @@ export default {
     // user
     const user = ref(JSON.parse(JSON.stringify(store.state.user)))
     const userBase = ref(JSON.parse(JSON.stringify(store.state.user)))
-
     const columns = ['男','女'];
     const showPicker = ref(false)
     const picUrlList = ref([
@@ -152,6 +151,18 @@ export default {
       // 比较信息，判断哪些内容做出了改变
       for(let key in userBase.value){
         if(user.value[key] != userBase.value[key]){
+          if(key == 'phoneNumber'){
+            if(checkPhone(user.value[key]) != ''){
+              data = {id: user.value.id}
+              return
+            }
+          }
+          if(key == 'email'){
+            if(checkEmail(user.value[key]) != ''){
+              data = {id: user.value.id}
+              return
+            }
+          }
           data[key] = user.value[key]
         }
       }

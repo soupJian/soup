@@ -37,7 +37,7 @@
     <van-button type="primary" @click="toChatDetail">发消息</van-button>
   </div>
   <div class="button-wrap" v-else>
-    <van-button class="primaryButton" type="primary">发消息</van-button>
+    <van-button class="primaryButton" type="primary" @click="toChatDetail">发消息</van-button>
   </div>
 </template>
 <script>

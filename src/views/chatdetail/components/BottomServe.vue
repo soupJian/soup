@@ -9,6 +9,7 @@
         maxlength="500"
         class="textarea"
         contenteditable
+        @focus="inputFocus"
       />
       <van-button :color="message.length > 0 ? '#0089FF': '#7EC0F9'" 
         class="right-button" @click="socketPostChat">发送</van-button>
@@ -28,6 +29,7 @@
 import { ref } from 'vue'
 import {request} from '@/util/request.js'
 export default {
+  emits:['socketPostChat','inputFocus'],
   setup(props,ctx){
     const message = ref('')
     const socketPostChat = ()=>{
@@ -48,10 +50,14 @@ export default {
       const message = result.picUrl
       ctx.emit('socketPostChat',message,1)
     }
+    const inputFocus = ()=>{
+      ctx.emit("inputFocus")
+    }
     return {
       message,
       socketPostChat,
-      upload
+      upload,
+      inputFocus
     }
   }
 }

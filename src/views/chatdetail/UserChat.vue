@@ -12,7 +12,7 @@
           <chat-list :chatArray="chatArray" @loadImg="loadImg"/>
         </van-list>
       </van-pull-refresh>
-      <bottom-serve @socketPostChat="socketPostChat"/>
+      <bottom-serve @socketPostChat="socketPostChat" @inputFocus="inputFocus"/>
     </div>
   </transition>
 </template>
@@ -106,6 +106,9 @@ export default {
       onLoad();
     };
     const loadImg = ()=>{
+      scroll()
+    }
+    const inputFocus = ()=>{
       scroll()
     }
     // 滚动到底部
@@ -204,7 +207,8 @@ export default {
       onLoad,
       loadImg,
       onRefresh,
-      handleRight
+      handleRight,
+      inputFocus
     }
   }
 }

@@ -9,7 +9,7 @@
           @load="onLoad"
           :finished="finished"
         >
-          <chat-list :chatArray="chatArray"/>
+          <chat-list :chatArray="chatArray" @loadImg="loadImg"/>
         </van-list>
       </van-pull-refresh>
       <bottom-serve @socketPostChat="socketPostChat"/>
@@ -20,7 +20,7 @@
 import MHeader from '@/components/MHeader'
 import ChatList from './components/ChatList'
 import BottomServe from './components/BottomServe'
-import { computed,onActivated, reactive, toRefs,watch,ref} from 'vue'
+import { computed,onActivated, reactive, toRefs,watch,ref, nextTick} from 'vue'
 import { useStore } from 'vuex'
 import {request} from '@/util/request.js'
 import $socket from '@/util/socket'
@@ -105,17 +105,18 @@ export default {
       state.loading = true;
       onLoad();
     };
+    const loadImg = ()=>{
+      scroll()
+    }
     // 滚动到底部
-    const scroll = () =>{
+    const scroll = async() =>{
+      await nextTick()
       // window.screen.height 屏幕高度 130是头部导航栏和底部输入框区域
         const contentHeight = window.screen.height - 140 
-        // 采用定时器0,解决输入后获取的还是上一个的高度
-        setTimeout(()=>{
-          // 滚动的高度 + 1000 是为了让滚动直接滚动到底部，模拟器正常，手机网页不正常
-          if(content.value.$el.scrollHeight > contentHeight){
-            content.value.$el.scrollTop =  content.value.$el.scrollHeight- contentHeight + 1000
-          }
-        },0)
+        // 滚动的高度 + 1000 是为了让滚动直接滚动到底部，模拟器正常，手机网页不正常
+      if(content.value.$el.scrollHeight > contentHeight){
+        content.value.$el.scrollTop =  content.value.$el.scrollHeight- contentHeight
+      }
     }
     // 用户向socket发送消息
     const socketPostChat = (message,type) =>{
@@ -183,7 +184,7 @@ export default {
     }
     onActivated(()=>{
       name.value = route.name
-      scroll()
+      // scroll()
     })
     watch(id,()=>{
       state.chatArray = []
@@ -201,6 +202,7 @@ export default {
       chatObj,
       socketPostChat,
       onLoad,
+      loadImg,
       onRefresh,
       handleRight
     }

@@ -10,19 +10,19 @@
         <p v-html="item.msg" class="msg"></p>
       </div>
       <div v-if="item.type == 1">
-        <img :src="item.msg" class="msgImg">
+        <van-image lazy-load :src="item.msg" class="msgImg" @load="loadImg" />
       </div>
-      <img :src="user.picUrl" class="picUrl" @click="toUser(user)">
+      <van-image lazy-load :src="user.picUrl" class="picUrl" @click="toUser(user)" />
     </div>
     <!-- 聊天对象 -->
     <div v-else class="fuser">
-      <img :src="picUrl(item)" class="picUrl" @click="toUser(item)">
+      <van-image lazy-load :src="picUrl(item)" class="picUrl" @click="toUser(item)" />
       <div v-if="item.type == 0" class="fuser-item">
         <span v-if="item.nick">{{item.nick}}</span>
         <p v-html="item.msg" class="msg"></p>
       </div>
       <div v-if="item.type == 1">
-        <img :src="item.msg" class="msgImg">
+        <van-image lazy-load :src="item.msg" class="msgImg" @load="loadImg"/>
       </div>
     </div>
   </div>
@@ -35,7 +35,8 @@ import fmt from '@/util/format'
 
 export default {
   props:['chatArray'],
-  setup(props){
+  emits:['loadImg'],
+  setup(props,ctx){
     const router = useRouter()
     const store = useStore()
     const arr = computed(()=>props.chatArray)
@@ -70,13 +71,17 @@ export default {
         }
       }
     }
+    const loadImg = () =>{
+      ctx.emit('loadImg')
+    }
     return {
       user,
       back,
       picUrl,
       toUser,
       fmt,
-      showTime
+      showTime,
+      loadImg
     }
   }
 }

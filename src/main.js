@@ -29,7 +29,9 @@ import {
   List,
   PullRefresh,
   SwipeCell,
-  Collapse, CollapseItem
+  Collapse, CollapseItem,
+  Image as VanImage,
+  Lazyload 
 } from 'vant'
 
 app.use(Button)
@@ -55,5 +57,7 @@ app.use(PullRefresh)
 app.use(SwipeCell);
 app.use(Collapse);
 app.use(CollapseItem);
+app.use(VanImage);
+app.use(Lazyload);
 
 

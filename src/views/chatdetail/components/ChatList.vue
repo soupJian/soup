@@ -99,7 +99,11 @@ export default {
     .picUrl{
       width: 30px;
       height: 30px;
-      border-radius: 50%;
+      :deep(img){
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+      }
     }
     .msg{
       padding: 5px 10px;

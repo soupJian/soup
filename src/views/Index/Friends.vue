@@ -14,7 +14,7 @@
       </div>
     </van-collapse-item>
   </van-collapse>
-  <van-index-bar >
+  <van-index-bar :index-list="indexList">
     <div v-for="item of friendsObj" :key="item[0]">
       <van-index-anchor :index="item[0]"/>
       <div class='item' v-for="list of item[1]" :key="list.id" @click="handleToUser(list.id)">
@@ -64,6 +64,12 @@ export default {
      const handleToUser = (id)=>{
        router.push(`/user/${id}`)
      }
+    // 创建右侧索引
+    const indexList = computed(()=>{
+      return friendsObj.value.map(item=>{
+        return item[0]
+      })
+    })
     //  进入群聊中心
      const handleToGroup = (item)=>{
         store.commit("setGroup",item)
@@ -74,6 +80,7 @@ export default {
         creategroup,
         addgroup,
         friendsObj,
+        indexList,
         handleToUser,
         handleToGroup
       };

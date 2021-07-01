@@ -3,7 +3,7 @@ moment.locale('zh-cn'); // 默认的语言环境为英语。
 const fmt = (time) =>{
   // 如果是今天
   if (new Date(time).toDateString() === new Date().toDateString()) {
-    return moment(time).format('LT');  
+    return moment(time).format('LT');
   }else{
     // 7天内
     const date = Date.now()
@@ -12,7 +12,7 @@ const fmt = (time) =>{
     if(difference < 604800000){
       return moment(time).format('dddd LT');
     }else{
-      return moment().format('MMMM Do YYYY')
+      return moment(time).format('MMMM Do YYYY')
     }
   }
 }

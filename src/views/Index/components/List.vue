@@ -9,7 +9,7 @@
           <span class="des-time">{{fmt(item.time)}}</span>
         </p>
         <p>
-          <span class="des-description">{{item.type == 0? '[图片]':item.msg}}</span>
+          <span class="des-description">{{item.msg}}</span>
           <span class="des-bradge" v-show="item.bradge > 0 && item.id != user.id">{{item.bradge}}</span>
         </p>
       </div>
